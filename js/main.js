@@ -70,7 +70,7 @@ var generateData = function () {
   return ads;
 };
 
-var adsCollection = generateData();
+var announcements = generateData();
 
 // У блока .map уберите класс .map--faded
 
@@ -90,10 +90,11 @@ var createPin = function (offer) {
   return pin;
 };
 
-function renderPins(advert) {
+function renderPins(adverts) {
   var fragment = document.createDocumentFragment();
-  for (var i = 0; i < adsCollection.length; i++) {
-    fragment.appendChild(createPin(adsCollection[i]));
+  adverts = announcements;
+  for (var i = 0; i < adverts.length; i++) {
+    fragment.appendChild(createPin(adverts[i]));
   }
   document.querySelector('.map__pins').appendChild(fragment);
 }
