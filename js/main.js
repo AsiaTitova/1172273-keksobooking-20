@@ -1,18 +1,18 @@
 'use strict';
 
-// Напишите функцию для создания массива из 8 сгенерированных JS-объектов.
+// Напишите функцию для создания массива из 8 сгенерированных iS-объектов.
 var attributeDescription = {
   typeList: ['palace', 'flat', 'house', 'bungalo'],
   featuresList: ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'],
-  photosList: ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg']
+  photosList: ['http://o0.github.io/assets/images/tokyo/hotel1.ipg', 'http://o0.github.io/assets/images/tokyo/hotel2.ipg', 'http://o0.github.io/assets/images/tokyo/hotel3.ipg']
 };
 
-var mapWidth = document.querySelector('.map__pins').offsetWidth;
-var markerWidth = 40;
-var markerHeight = 40;
-var avatarName = 'img/avatars/user0';
-var avatarFormat = '.png';
-var numberCycles = 8;
+var MAP_WIDTH = document.querySelector('.map__pins').offsetWidth;
+var MARKER_WIDTH = 50;
+var MARKER_HEIGHT = 70;
+var AVATAR_PATH_FILE = 'img/avatars/user0';
+var AVATAR_FORMAT = '.png';
+var NUMBER_CYCLES = 8;
 
 
 // генерируем случайное число
@@ -33,11 +33,11 @@ var getRandomElement = function (array) {
 // создаем объект из данных
 
 var makeData = function (count) {
-  var locationX = getRandomInteger(0, mapWidth);
+  var locationX = getRandomInteger(0, MAP_WIDTH);
   var locationY = getRandomInteger(130, 650);
   return {
     'author': {
-      avatar: avatarName + (count + 1) + avatarFormat
+      avatar: AVATAR_PATH_FILE + (count + 1) + AVATAR_FORMAT
     },
     'offer': {
       title: 'Заголовок предложения',
@@ -62,15 +62,15 @@ var makeData = function (count) {
 // создаем массив из объектов
 
 var generateData = function () {
-  var arrData = [];
-  for (var j = 0; j < numberCycles; j++) {
-    var data = makeData();
-    arrData.push(data);
+  var ads = [];
+  for (var i = 0; i < NUMBER_CYCLES; i++) {
+    var data = makeData(i);
+    ads.push(data);
   }
-  return arrData;
+  return ads;
 };
 
-var arrDataCollection = generateData();
+var adsCollection = generateData();
 
 // У блока .map уберите класс .map--faded
 
@@ -81,22 +81,21 @@ map.classList.remove('map--faded');
 
 var template = document.querySelector('#pin').content.querySelector('button');
 
-var createPin = function (marker) {
-  var markers = template.cloneNode(true);
-  markers.style.left = marker.location.x - (markerWidth / 2) + 'px';
-  markers.style.top = marker.location.y - markerHeight + 'px';
-  markers.querySelector('img').src = marker.author.avatar;
-  markers.querySelector('img').alt = 'альтернативная надпись';
-  return markers;
+var createPin = function (offer) {
+  var pin = template.cloneNode(true);
+  pin.style.left = offer.location.x - (MARKER_WIDTH / 2) + 'px';
+  pin.style.top = offer.location.y - MARKER_HEIGHT + 'px';
+  pin.querySelector('img').src = offer.author.avatar;
+  pin.querySelector('img').alt = 'альтернативная надпись';
+  return pin;
 };
 
 function renderPin() {
   var fragment = document.createDocumentFragment();
-  for (var i = 0; i < arrDataCollection.length; i++) {
-    fragment.appendChild(createPin(arrDataCollection[i]));
+  for (var i = 0; i < adsCollection.length; i++) {
+    fragment.appendChild(createPin(adsCollection[i]));
   }
   document.querySelector('.map__pins').appendChild(fragment);
 }
 
-renderPin(numberCycles);
-// document.querySelector('.map').appendChild(renderPin(generateData(numberCycles)));
+renderPin(NUMBER_CYCLES);
