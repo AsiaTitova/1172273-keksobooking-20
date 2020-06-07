@@ -1,10 +1,10 @@
 'use strict';
 
-// Напишите функцию для создания массива из 8 сгенерированных iS-объектов.
+// Напишите функцию для создания массива из 8 сгенерированных JS-объектов.
 var attributeDescription = {
   typeList: ['palace', 'flat', 'house', 'bungalo'],
   featuresList: ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'],
-  photosList: ['http://o0.github.io/assets/images/tokyo/hotel1.ipg', 'http://o0.github.io/assets/images/tokyo/hotel2.ipg', 'http://o0.github.io/assets/images/tokyo/hotel3.ipg']
+  photosList: ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg']
 };
 
 var MAP_WIDTH = document.querySelector('.map__pins').offsetWidth;
@@ -90,7 +90,7 @@ var createPin = function (offer) {
   return pin;
 };
 
-function renderPin() {
+function renderPins(advert) {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < adsCollection.length; i++) {
     fragment.appendChild(createPin(adsCollection[i]));
@@ -98,4 +98,4 @@ function renderPin() {
   document.querySelector('.map__pins').appendChild(fragment);
 }
 
-renderPin(NUMBER_CYCLES);
+renderPins(NUMBER_CYCLES);
