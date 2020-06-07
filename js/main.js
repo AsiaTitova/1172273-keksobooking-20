@@ -2,7 +2,6 @@
 
 // Напишите функцию для создания массива из 8 сгенерированных JS-объектов.
 var attributeDescription = {
-  avatarList: ['img/avatars/user01.png', 'img/avatars/user02.png', 'img/avatars/user03.png', 'img/avatars/user04.png', 'img/avatars/user05.png', 'img/avatars/user06.png', 'img/avatars/user07.png', 'img/avatars/user08.png'],
   typeList: ['palace', 'flat', 'house', 'bungalo'],
   featuresList: ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'],
   photosList: ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg']
@@ -11,6 +10,12 @@ var attributeDescription = {
 var mapWidth = document.querySelector('.map__pins').offsetWidth;
 var markerWidth = 40;
 var markerHeight = 40;
+var avatarName = 'img/avatars/user0';
+var avatarFormat = '.png';
+var numberCycles = 8;
+
+
+// генерируем случайное число
 
 var getRandomInteger = function (min, max) {
   // случайное число от min до (max+1)
@@ -18,19 +23,25 @@ var getRandomInteger = function (min, max) {
   return Math.floor(rand);
 };
 
+// генерируем случайный элемент массива
+
 var getRandomElement = function (array) {
   var randomIndex = Math.floor(Math.random() * array.length);
   return array[randomIndex];
 };
 
-var makeData = function () {
+// создаем объект из данных
+
+var makeData = function (count) {
+  var locationX = getRandomInteger(0, mapWidth);
+  var locationY = getRandomInteger(130, 650);
   return {
     'author': {
-      avatar: getRandomElement(attributeDescription.avatarList)
+      avatar: avatarName + (count + 1) + avatarFormat
     },
     'offer': {
       title: 'Заголовок предложения',
-      address: 'getRandomInteger(0, mapWidth), getRandomInteger(130, 650)',
+      address: locationX + ' , ' + locationY,
       price: getRandomInteger(500, 10000),
       type: getRandomElement(attributeDescription.typeList),
       rooms: getRandomInteger(1, 4),
@@ -42,22 +53,24 @@ var makeData = function () {
       photos: getRandomElement(attributeDescription.photosList)
     },
     'location': {
-      x: getRandomInteger(0, mapWidth),
-      y: getRandomInteger(130, 650)
+      x: locationX,
+      y: locationY
     }
   };
 };
 
+// создаем массив из объектов
+
 var generateData = function () {
   var arrData = [];
-  for (var j = 0; j < 8; j++) {
+  for (var j = 0; j < numberCycles; j++) {
     var data = makeData();
     arrData.push(data);
   }
   return arrData;
 };
 
-var arrDataObj = generateData();
+var arrDataCollection = generateData();
 
 // У блока .map уберите класс .map--faded
 
@@ -69,23 +82,21 @@ map.classList.remove('map--faded');
 var template = document.querySelector('#pin').content.querySelector('button');
 
 var createPin = function (marker) {
-  for (var i = 0; i < arrDataObj.length; i++) {
-    var markers = template.cloneNode(true);
-    markers.style.left = marker.location.x - (markerWidth / 2) + 'px';
-    markers.style.top = marker.location.y - markerHeight + 'px';
-    markers.querySelector('img').src = marker.author.avatar;
-    markers.querySelector('img').alt = 'альтернативная надпись';
-  }
+  var markers = template.cloneNode(true);
+  markers.style.left = marker.location.x - (markerWidth / 2) + 'px';
+  markers.style.top = marker.location.y - markerHeight + 'px';
+  markers.querySelector('img').src = marker.author.avatar;
+  markers.querySelector('img').alt = 'альтернативная надпись';
   return markers;
 };
 
 function renderPin() {
   var fragment = document.createDocumentFragment();
-  for (var i = 0; i < arrDataObj.length; i++) {
-    fragment.appendChild(createPin(arrDataObj[i]));
+  for (var i = 0; i < arrDataCollection.length; i++) {
+    fragment.appendChild(createPin(arrDataCollection[i]));
   }
   document.querySelector('.map__pins').appendChild(fragment);
 }
 
-renderPin();
-
+renderPin(numberCycles);
+// document.querySelector('.map').appendChild(renderPin(generateData(numberCycles)));
