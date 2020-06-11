@@ -30,6 +30,12 @@ var getRandomElement = function (array) {
   return array[randomIndex];
 };
 
+// перемешиваем массив
+
+// var mixElement = function (array) {
+//   var
+// }
+
 // создаем объект из данных
 
 var makeData = function (count) {
@@ -42,10 +48,10 @@ var makeData = function (count) {
     'offer': {
       title: 'Заголовок предложения',
       address: locationX + ' , ' + locationY,
-      price: getRandomInteger(500, 10000),
+      price: getRandomInteger(0, 1000000),
       type: getRandomElement(attributeDescription.typeList),
       rooms: getRandomInteger(1, 4),
-      guests: getRandomInteger(1, 10),
+      guests: getRandomInteger(0, 3),
       checkin: getRandomInteger(12, 14) + ':00',
       checkout: getRandomInteger(12, 14) + ':00',
       features: getRandomElement(attributeDescription.featuresList),
@@ -79,10 +85,10 @@ map.classList.remove('map--faded');
 
 // На основе данных, созданных в первом пункте, создайте DOM-элементы, соответствующие меткам на карте, и заполните их данными из массива.
 
-var template = document.querySelector('#pin').content.querySelector('button');
+var pinTemplate = document.querySelector('#pin').content.querySelector('button');
 
 var createPin = function (offer) {
-  var pin = template.cloneNode(true);
+  var pin = pinTemplate.cloneNode(true);
   pin.style.left = offer.location.x - (MARKER_WIDTH / 2) + 'px';
   pin.style.top = offer.location.y - MARKER_HEIGHT + 'px';
   pin.querySelector('img').src = offer.author.avatar;
@@ -100,3 +106,97 @@ function renderPins(adverts) {
 }
 
 renderPins(NUMBER_CYCLES);
+
+// На основе первого по порядку элемента из сгенерированного массива и шаблона #card создайте DOM-элемент объявления (карточка объявления), заполните его данными из объекта:
+
+var cardTemplate = document.querySelector('#card').content.querySelector('article');
+
+var createCard = function (card) {
+  var cardAds = cardTemplate.cloneNode(true);
+  cardAds.querySelector('.popup__avatar').textContent = card.author.avatar;
+
+  if (card.offer.title) {
+    cardAds.querySelector('.popup__title').textContent = card.offer.title;
+  } else {
+    cardAds.querySelector('.popup__title').classList.add('visually-hidden');
+  }
+
+  if (card.offer.address) {
+    cardAds.querySelector('.popup__text--address').textContent = card.offer.address;
+  } else {
+    cardAds.querySelector('.popup__text--address').classList.add('visually-hidden');
+  }
+
+  if (card.offer.price) {
+    cardAds.querySelector('.popup__text--price').textContent = card.offer.price + '₽/ночь';
+  } else {
+    cardAds.querySelector('.popup__text--price').classList.add('visually-hidden');
+  }
+
+  if (card.offer.type) {
+    if (card.offer.type === 'bungalo') {
+      card.offer.type = 'Бунгало';
+    }
+
+    if (card.offer.type === 'flat') {
+      card.offer.type = 'Квартира';
+    }
+
+    if (card.offer.type === 'house') {
+      card.offer.type = 'Дом';
+    }
+
+    if (card.offer.type === 'palace') {
+      card.offer.type = 'Дворец';
+    }
+
+    cardAds.querySelector('.popup__type').textContent = card.offer.type;
+  } else {
+    cardAds.querySelector('.popup__type').classList.add('visually-hidden');
+  }
+
+  if (card.offer.rooms && card.offer.guests) {
+    cardAds.querySelector('.popup__text--capacity').textContent = card.offer.rooms + ' комнаты для ' + card.offer.guests + ' гостей';
+  } else {
+    cardAds.querySelector('.popup__text--capacity').classList.add('visually-hidden');
+  }
+
+  if (card.offer.checkin && card.offer.checkout) {
+    cardAds.querySelector('.popup__text--time').textContent = 'Заезд после ' + card.offer.checkin + ', выезд до ' + card.offer.checkout;
+  } else {
+    cardAds.querySelector('.popup__text--time').classList.add('visually-hidden');
+  }
+
+  if (card.offer.features) {
+    for (var i = 0; i < card.offer.features.length; i++) {
+      var featuresItem = document.createElement('li');
+      featuresItem.classList.add('popup__features');
+      featuresItem.classList.add('popup__features--' + featuresItem[i]);
+    }
+    // cardAds.querySelector('.popup__features').textContent = card.offer.features;
+  } else {
+    cardAds.querySelector('.popup__features').classList.add('visually-hidden');
+  }
+
+  if (card.offer.description) {
+    cardAds.querySelector('.popup__description').textContent = card.offer.description;
+  } else {
+    cardAds.querySelector('.popup__description').classList.add('visually-hidden');
+  }
+
+  if (card.offer.photos) {
+    for (var j = 0; j < card.offer.photos.length; j++) {
+      var photosItem = document.createElement('img');
+      photosItem.classList.add('popup__photo');
+      cardAds.querySelector('.popup__photo').src = card.offer.photos[j];
+      cardAds.querySelector('.popup__photos').appendChild(photosItem);
+    }
+  } else {
+    cardAds.querySelector('.popup__photo').classList.add('visually-hidden');
+  }
+
+  return cardAds;
+};
+
+var filters = document.querySelector('.map__filters-container');
+map.insertBefore(createCard(announcements[0]), filters);
