@@ -14,7 +14,7 @@ var AVATAR_PATH_FILE = 'img/avatars/user0';
 var AVATAR_FORMAT = '.png';
 var NUMBER_CYCLES = 8;
 var IMG_WIDTH = 45;
-var IMG_HEIGHT = 45;
+var IMG_HEIGHT = 40;
 var IMG_ALT = 'Фотография жилья';
 
 
@@ -144,20 +144,20 @@ var createTypeCard = function (card) {
 var createFeature = function (container, feature) {
   for (var i = 0; i < feature.length; i++) {
     var featureItem = document.createElement('li');
-    featureItem.classList.add('popup__features');
-    featureItem.classList.add('popup__features--' + feature[i]);
+    featureItem.classList.add('popup__feature');
+    featureItem.classList.add('popup__feature--' + feature[i]);
     container.querySelector('.popup__features').appendChild(featureItem);
   }
 };
 
 var createPhoto = function (container, photos) {
-  for (var j = 0; j < photos.length; j++) {
+  for (var i = 0; i < photos.length; i++) {
     var photosItem = document.createElement('img');
     photosItem.classList.add('popup__photo');
-    container.querySelector('.popup__photo').src = photos[j];
-    container.querySelector('.popup__photo').width = IMG_WIDTH;
-    container.querySelector('.popup__photo').height = IMG_HEIGHT;
-    container.querySelector('.popup__photo').alt = IMG_ALT;
+    photosItem.src = photos[i];
+    photosItem.width = IMG_WIDTH;
+    photosItem.height = IMG_HEIGHT;
+    photosItem.alt = IMG_ALT;
     container.querySelector('.popup__photos').appendChild(photosItem);
   }
 };
