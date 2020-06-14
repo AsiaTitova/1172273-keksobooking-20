@@ -35,15 +35,15 @@ var getRandomElement = function (array) {
 
 // перемешиваем массив
 
-var mixElement = function (array) {
-  for (var i = array.length - 1; i > 0; i--) {
-    var mixItem = Math.floor(Math.random() * (i + 1));
-    var arrItem = array[mixItem];
-    array[mixItem] = array[i];
-    array[i] = arrItem;
-  }
-  return array;
-};
+// var mixElement = function (array) {
+//   for (var i = array.length - 1; i > 0; i--) {
+//     var mixItem = Math.floor(Math.random() * (i + 1));
+//     var arrItem = array[mixItem];
+//     array[mixItem] = array[i];
+//     array[i] = arrItem;
+//   }
+//   return array;
+// };
 
 // создаем объект из данных
 
@@ -131,12 +131,12 @@ var createTypeCard = function (card) {
     case card.offer.type === 'house':
       return 'Дом';
 
-    case card.offer.type === 'palace':
+    default:
       return 'Дворец';
   }
 };
 
-var createFeature = function (container, feature) {
+var createFeatures = function (container, feature) {
   for (var i = 0; i < feature.length; i++) {
     var featureItem = document.createElement('li');
     featureItem.classList.add('popup__feature');
@@ -145,7 +145,7 @@ var createFeature = function (container, feature) {
   }
 };
 
-var createPhoto = function (container, photos) {
+var createPhotos = function (container, photos) {
   for (var i = 0; i < photos.length; i++) {
     var photosItem = document.createElement('img');
     photosItem.classList.add('popup__photo');
@@ -175,8 +175,8 @@ var createCard = function (card) {
 
   cardAd.querySelector('.popup__description').textContent = card.offer.description || 'no value';
 
-  createFeature(cardAd, card.offer.features);
-  createPhoto(cardAd, card.offer.photos);
+  createFeatures(cardAd, card.offer.features);
+  createPhotos(cardAd, card.offer.photos);
 
   var childElements = cardAd.querySelectorAll(':scope > *');
   childElements.forEach(function (element) {
