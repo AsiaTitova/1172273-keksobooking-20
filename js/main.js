@@ -123,22 +123,17 @@ var cardTemplate = document.querySelector('#card').content.querySelector('articl
 var createTypeCard = function (card) {
   switch (true) {
     case card.offer.type === 'bungalo':
-      card.offer.type = 'Бунгало';
-      break;
+      return 'Бунгало';
 
     case card.offer.type === 'flat':
-      card.offer.type = 'Квартира';
-      break;
+      return 'Квартира';
 
     case card.offer.type === 'house':
-      card.offer.type = 'Дом';
-      break;
+      return 'Дом';
 
     case card.offer.type === 'palace':
-      card.offer.type = 'Дворец';
-      break;
+      return 'Дворец';
   }
-  return card.offer.type;
 };
 
 var createFeature = function (container, feature) {
@@ -178,11 +173,10 @@ var createCard = function (card) {
 
   cardAd.querySelector('.popup__text--time').textContent = 'Заезд после ' + card.offer.checkin + ', выезд до ' + card.offer.checkout || 'no value';
 
-  cardAd.querySelector('.popup__features').textContent = createFeature(cardAd, card.offer.features) || 'no value';
-
   cardAd.querySelector('.popup__description').textContent = card.offer.description || 'no value';
 
-  cardAd.querySelector('.popup__photo').textContent = createPhoto(cardAd, card.offer.photos) || 'no value';
+  createFeature(cardAd, card.offer.features);
+  createPhoto(cardAd, card.offer.photos);
 
   var childElements = cardAd.querySelectorAll(':scope > *');
   childElements.forEach(function (element) {
