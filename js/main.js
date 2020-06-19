@@ -289,7 +289,6 @@ var typeInput = form.querySelector('#type');
 var setMinPrice = function (input, minPrice) {
   input.setAttribute('min', minPrice);
   input.placeholder = minPrice;
-  input.setCustomValidity('Цена не может быть меньше ' + minPrice);
 };
 
 priceInput.addEventListener('change', function () {
