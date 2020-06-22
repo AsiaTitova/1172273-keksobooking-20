@@ -18,6 +18,9 @@ var MIN_PRICE_BUNGALO = 0;
 var MIN_PRICE_FLAT = 1000;
 var MIN_PRICE_HOUSE = 5000;
 var MIN_PRICE_PALACE = 10000;
+var LEFT_MOUSE_BUTTON = 1;
+var ENTER = 13;
+var ESCAPE = 27;
 
 // заблокировать активные поля формы
 
@@ -51,19 +54,11 @@ var activatePage = function () {
   renderPins(NUMBER_CYCLES);
 };
 
-// создаем объект для обозначения клавиш и кнопок мыши
-
-var keysCode = {
-  leftMouseButton: 1,
-  enter: 13,
-  escape: 27
-};
-
 // нажатием левой кнопки мыши
 
 var mainPin = document.querySelector('.map__pin--main');
 mainPin.addEventListener('mousedown', function (evt) {
-  if (evt.which === keysCode.leftMouseButton) {
+  if (evt.which === LEFT_MOUSE_BUTTON) {
     evt.preventDefault();
     activatePage();
   }
@@ -72,7 +67,7 @@ mainPin.addEventListener('mousedown', function (evt) {
 // нажатием клавиши Enter
 
 mainPin.addEventListener('keydown', function (evt) {
-  if (evt.keyCode === keysCode.enter) {
+  if (evt.keyCode === ENTER) {
     evt.preventDefault();
     activatePage();
   }
@@ -196,15 +191,15 @@ var getRandomElement = function (array) {
 
 // перемешиваем массив
 
-var mixElement = function (array) {
-  for (var i = array.length - 1; i > 0; i--) {
-    var mixItem = Math.floor(Math.random() * (i + 1));
-    var arrItem = array[mixItem];
-    array[mixItem] = array[i];
-    array[i] = arrItem;
-  }
-  return array;
-};
+// var mixElement = function (array) {
+//   for (var i = array.length - 1; i > 0; i--) {
+//     var mixItem = Math.floor(Math.random() * (i + 1));
+//     var arrItem = array[mixItem];
+//     array[mixItem] = array[i];
+//     array[i] = arrItem;
+//   }
+//   return array;
+// };
 
 // создаем объект из данных
 
@@ -262,12 +257,57 @@ var createPin = function (offer) {
 };
 
 function renderPins(adverts) {
+  // var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+  var filters = document.querySelector('.map__filters-container');
   var fragment = document.createDocumentFragment();
   adverts = announcements;
-  for (var i = 0; i < adverts.length; i++) {
-    fragment.appendChild(createPin(adverts[i]));
-  }
+  // for (var i = 0; i < adverts.length; i++) {
+  //   fragment.appendChild(createPin(adverts[i]));
+  // }
+  adverts.forEach(function (ad) {
+    var pinElement = createPin(ad);
+    pinElement.addEventListener('click', function (evt) {
+      evt.preventDefault();
+      var card = createCard(ad);
+      map.insertBefore(createCard(card, filters));
+    });
+    fragment.appendChild(pinElement);
+  });
   document.querySelector('.map__pins').appendChild(fragment);
+
+  // открытие нужной карточки при нажатии на нужноее объявление
+
+  // card.addEventListener('click', function (evt) {
+  //   if (evt.which === LEFT_MOUSE_BUTTON) {
+  //     evt.preventDefault();
+  //     map.insertBefore(createCard(announcements[cards]), filters);
+  //   }
+  // });
+  // card.addEventListener('keypress', function (evt) {
+  //   if (evt.keyCode === ENTER) {
+  //     evt.preventDefault();
+  //     map.insertBefore(createCard(announcements[cards]), filters);
+  //   }
+  // });
+
+  // // закртытие карточки
+  // var closeButton = document.querySelectorAll('.popup__close');
+  // var card = document.querySelectorAll('.map__card');
+
+  // closeButton.forEach(function (item, button) {
+  //   item.addEventListener('click', function (evt) {
+  //     if (evt.which === LEFT_MOUSE_BUTTON) {
+  //       evt.preventDefault();
+  //       card[button].classList.add('hidden');
+  //     }
+  //   });
+  //   item.addEventListener('keypress', function (evt) {
+  //     if (evt.keyCode === ESCAPE) {
+  //       evt.preventDefault();
+  //       card[button].classList.add('hidden');
+  //     }
+  //   });
+  // });
 }
 
 // На основе первого по порядку элемента из сгенерированного массива и шаблона #card создайте DOM-элемент объявления (карточка объявления), заполните его данными из объекта:
@@ -311,7 +351,7 @@ var createPhotos = function (container, photos) {
   }
 };
 
-var createCard = function (card) {
+function createCard(card) {
   var cardAd = cardTemplate.cloneNode(true);
   cardAd.querySelector('.popup__avatar').textContent = card.author.avatar || 'no value';
 
@@ -340,40 +380,4 @@ var createCard = function (card) {
   });
 
   return cardAd;
-};
-
-// открытие нужной карточки при нажатии на нужноее объявление
-
-var filters = document.querySelector('.map__filters-container');
-var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-
-mapPins.forEach(function (item, i) {
-  item.addEventListener('mousedown', function (evt) {
-    if (evt.which === keysCode.leftMouseButton) {
-      evt.preventDefault();
-      map.insertBefore(createCard(announcements[i]), filters);
-    }
-    if (evt.keyCode === keysCode.enter) {
-      evt.preventDefault();
-      map.insertBefore(createCard(announcements[i]), filters);
-    }
-  });
-});
-
-// закртытие карточки
-
-var closeButton = document.querySelectorAll('.popup__close');
-var card = document.querySelectorAll('.map__card');
-
-closeButton.forEach(function (item, i) {
-  item.addEventListener('click', function (evt) {
-    if (evt.which === keysCode.leftMouseButton) {
-      evt.preventDefault();
-      card[i].classList.add('hidden');
-    }
-    if (evt.keyCode === keysCode.escape) {
-      evt.preventDefault();
-      card[i].classList.add('hidden');
-    }
-  });
-});
+}
