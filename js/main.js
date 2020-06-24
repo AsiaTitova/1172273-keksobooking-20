@@ -327,6 +327,12 @@ function onEscPress(evt) {
   }
 }
 
+function closeElement(element) {
+  if (element) {
+    element.remove();
+  }
+}
+
 function renderPins(adverts) {
   var filters = document.querySelector('.map__filters-container');
   var fragment = document.createDocumentFragment();
@@ -334,7 +340,9 @@ function renderPins(adverts) {
     var pinElement = createPin(ad);
     // открытие нужной карточки при нажатии на нужноее объявление
     pinElement.addEventListener('click', function (evt) {
+
       evt.preventDefault();
+      closeElement(document.querySelector('.popup'));
       document.addEventListener('keypress', onEscPress);
       var card = createCard(ad);
       // закртытие карточки
