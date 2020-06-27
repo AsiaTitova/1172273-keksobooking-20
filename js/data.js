@@ -2,8 +2,6 @@
 
 (function () {
   var MAP_WIDTH = document.querySelector('.map__pins').offsetWidth;
-  var MARKER_WIDTH = 50;
-  var MARKER_HEIGHT = 70;
   var AVATAR_PATH_FILE = 'img/avatars/user0';
   var AVATAR_FORMAT = '.png';
   var NUMBER_CYCLES = 8;
@@ -71,22 +69,7 @@
 
   var announcements = generateData();
 
-
-  // // На основе данных, созданных в первом пункте, создайте DOM-элементы, соответствующие меткам на карте, и заполните их данными из массива.
-
-  var pinTemplate = document.querySelector('#pin').content.querySelector('button');
-
-  var createPin = function (offer) {
-    var pin = pinTemplate.cloneNode(true);
-    pin.style.left = offer.location.x - (MARKER_WIDTH / 2) + 'px';
-    pin.style.top = offer.location.y - MARKER_HEIGHT + 'px';
-    pin.querySelector('img').src = offer.author.avatar;
-    pin.querySelector('img').alt = 'альтернативная надпись';
-    return pin;
-  };
-
   window.data = {
     announcements: announcements,
-    createPin: createPin
   };
 })();

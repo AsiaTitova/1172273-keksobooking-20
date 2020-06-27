@@ -7,9 +7,19 @@
 
   var map = document.querySelector('.map');
 
+  // переводим карту в активное состояние
+  function activateMap() {
+    map.classList.remove('map--faded');
+    addPins();
+  }
+  // добавление меток на карту
+  function addPins() {
+    window.main.renderPins(window.data.announcements);
+  }
+
   // определяем координаты главной метки на карте
 
-  var getPositionPin = function () {
+  function getPositionPin() {
     // ищем нужный элемент;
     var pin = document.querySelector('.map__pin--main');
     // верхний отступ эл-та от родителя;
@@ -26,7 +36,7 @@
     }
     var coordinates = coordinateX + ', ' + coordinateY;
     return coordinates;
-  };
+  }
 
   // перемещение основной метки по карте
 
@@ -87,6 +97,8 @@
   // })();
 
   window.map = {
-    getPositionPin: getPositionPin
+    activateMap: activateMap,
+    getPositionPin: getPositionPin,
+    addPins: addPins
   };
 })();

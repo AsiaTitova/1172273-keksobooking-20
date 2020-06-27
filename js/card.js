@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var ESCAPE = 27;
   var IMG_WIDTH = 45;
   var IMG_HEIGHT = 40;
   var IMG_ALT = 'Фотография жилья';
@@ -75,8 +76,28 @@
     return cardAd;
   }
 
+  function closeCard(card) {
+    card.querySelector('.popup__close').addEventListener('click', function () {
+      card.remove();
+      document.removeEventListener('keypress', onEscPress);
+    });
+  }
+
+  function onEscPress(evt) {
+    if (evt.keyCode === ESCAPE) {
+      var card = document.querySelector('.popup');
+      if (card) {
+        evt.preventDefault();
+        card.remove();
+      }
+      document.removeEventListener('keypress', onEscPress);
+    }
+  }
+
   window.card = {
-    createCard: createCard
+    createCard: createCard,
+    closeCard: closeCard,
+    onEscPress: onEscPress
   };
 
 })();

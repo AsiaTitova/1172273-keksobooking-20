@@ -429,3 +429,80 @@
 
 //   return cardAd;
 // }
+
+(function () {
+  var LEFT_MOUSE_BUTTON = 1;
+  var ENTER = 13;
+
+  var mainPin = document.querySelector('.map__pin--main');
+
+  // заблокировать элементы
+  var disableElements = function (element) {
+    for (var i = 0; i < element.length; i++) {
+      element[i].setAttribute('disabled', 'disabled');
+    }
+  };
+  // разблокировать элементы
+  var activateElements = function (elements) {
+    for (var i = 0; i < elements.length; i++) {
+      elements[i].removeAttribute('disabled', 'disabled');
+    }
+  };
+
+  // переводим страницу в активное состояние
+  var activatePage = function () {
+    window.map.activateMap();
+    window.activateForm();
+  };
+
+  // нажатием левой кнопки мыши
+  mainPin.addEventListener('mousedown', function (evt) {
+    if (evt.which === LEFT_MOUSE_BUTTON) {
+      evt.preventDefault();
+      activatePage();
+    }
+  });
+
+  // нажатием клавиши Enter
+  mainPin.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === ENTER) {
+      evt.preventDefault();
+      activatePage();
+    }
+  });
+
+  function closeElement(element) {
+    if (element) {
+      element.remove();
+    }
+  }
+
+  function renderPins(adverts) {
+    var filters = document.querySelector('.map__filters-container');
+    var fragment = document.createDocumentFragment();
+    adverts.forEach(function (ad) {
+      var pinElement = window.createPin(ad);
+      // открытие нужной карточки при нажатии на нужноее объявление
+      pinElement.addEventListener('click', function (evt) {
+
+        evt.preventDefault();
+        closeElement(document.querySelector('.popup'));
+        document.addEventListener('keypress', window.card.onEscPress);
+        var card = window.card.createCard(ad);
+        // закртытие карточки
+        window.card.closeCard(card);
+        document.querySelector('.map').insertBefore(card, filters);
+      });
+      fragment.appendChild(pinElement);
+    });
+    document.querySelector('.map__pins').appendChild(fragment);
+  }
+
+  window.main = {
+    disableElements: disableElements,
+    activateElements: activateElements,
+    closeElement: closeElement,
+    renderPins: renderPins
+  };
+})();
+

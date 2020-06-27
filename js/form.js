@@ -1,8 +1,6 @@
 'use strict';
 
 (function () {
-  var LEFT_MOUSE_BUTTON = 1;
-  var ENTER = 13;
   var MIN_PRICE_BUNGALO = 0;
   var MIN_PRICE_FLAT = 1000;
   var MIN_PRICE_HOUSE = 5000;
@@ -10,51 +8,16 @@
 
   var form = document.querySelector('.ad-form');
   var formFieldset = form.querySelectorAll('.ad-form__element');
-  var map = document.querySelector('.map');
 
   // заблокировать активные поля формы
+  window.main.disableElements(formFieldset);
 
-  var disableElements = function (element) {
-    for (var i = 0; i < element.length; i++) {
-      element[i].setAttribute('disabled', 'disabled');
-    }
-  };
+  // переводим форму в активное состояние
 
-  disableElements(formFieldset);
-
-  // разблокировать активные поля формы
-
-  var activateElements = function (elements) {
-    for (var i = 0; i < elements.length; i++) {
-      elements[i].removeAttribute('disabled', 'disabled');
-    }
-  };
-
-  // переводим страницу в активное состояние
-
-  var activatePage = function () {
-    map.classList.remove('map--faded');
+  var activateForm = function () {
     form.classList.remove('ad-form--disabled');
-    activateElements(formFieldset);
-    window.pin.renderPins(window.data.announcements);
+    window.main.activateElements(formFieldset);
   };
-
-  // нажатием левой кнопки мыши
-  var mainPin = document.querySelector('.map__pin--main');
-  mainPin.addEventListener('mousedown', function (evt) {
-    if (evt.which === LEFT_MOUSE_BUTTON) {
-      evt.preventDefault();
-      activatePage();
-    }
-  });
-
-  // нажатием клавиши Enter
-  mainPin.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === ENTER) {
-      evt.preventDefault();
-      activatePage();
-    }
-  });
 
   // заполнение полей ввода
 
@@ -65,7 +28,7 @@
   // заполнение поля адреса
 
   var address = form.querySelector('#address');
-  fillFormField(address, window.map.getPositionPin);
+  fillFormField(address, window.map.getPositionPin());
 
   // валидация формы
 
@@ -129,10 +92,6 @@
     }
   });
 
-  window.form = {
-    disableElements: disableElements,
-    activatePage: activatePage
-  };
-
+  window.activateForm = activateForm;
 })();
 
