@@ -69,7 +69,5 @@
 
   var announcements = generateData();
 
-  window.data = {
-    announcements: announcements,
-  };
+  window.announcements = announcements;
 })();

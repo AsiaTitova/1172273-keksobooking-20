@@ -10,25 +10,26 @@
   var formFieldset = form.querySelectorAll('.ad-form__element');
 
   // заблокировать активные поля формы
-  window.main.disableElements(formFieldset);
+
+  function disableForm() {
+    for (var i = 0; i < formFieldset.length; i++) {
+      formFieldset[i].setAttribute('disabled', 'disabled');
+    }
+  }
 
   // переводим форму в активное состояние
 
-  var activateForm = function () {
+  function activateForm() {
     form.classList.remove('ad-form--disabled');
-    window.main.activateElements(formFieldset);
-  };
+    window.utils.activateElements(formFieldset);
+  }
 
-  // заполнение полей ввода
+  // заполнение полей адерса
 
-  var fillFormField = function (input, content) {
-    input.value = content;
-  };
-
-  // заполнение поля адреса
-
-  var address = form.querySelector('#address');
-  fillFormField(address, window.map.getPositionPin());
+  function fillAddress() {
+    var address = form.querySelector('#address');
+    address.value = window.map.getPositionPin();
+  }
 
   // валидация формы
 
@@ -92,6 +93,10 @@
     }
   });
 
-  window.activateForm = activateForm;
+  window.form = {
+    activateForm: activateForm,
+    disableForm: disableForm,
+    fillAddress: fillAddress
+  };
 })();
 

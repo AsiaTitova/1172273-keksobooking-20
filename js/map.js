@@ -7,14 +7,15 @@
 
   var map = document.querySelector('.map');
 
+  // переводим страницу в неактивное состояние
+
+  function deactivateMap() {
+    map.classList.add('map--faded');
+  }
+
   // переводим карту в активное состояние
   function activateMap() {
     map.classList.remove('map--faded');
-    addPins();
-  }
-  // добавление меток на карту
-  function addPins() {
-    window.main.renderPins(window.data.announcements);
   }
 
   // определяем координаты главной метки на карте
@@ -98,7 +99,7 @@
 
   window.map = {
     activateMap: activateMap,
-    getPositionPin: getPositionPin,
-    addPins: addPins
+    deactivateMap: deactivateMap,
+    getPositionPin: getPositionPin
   };
 })();

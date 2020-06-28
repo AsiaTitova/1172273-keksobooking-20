@@ -94,10 +94,11 @@
     }
   }
 
+
   window.card = {
     createCard: createCard,
     closeCard: closeCard,
-    onEscPress: onEscPress
+    onEscPress: onEscPress,
   };
 
 })();
