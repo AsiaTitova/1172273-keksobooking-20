@@ -1,25 +1,17 @@
 'use strict';
 
 (function () {
-  var LEFT_MOUSE_BUTTON = 1;
 
-  // разблокировать элементы
-  var activateElements = function (elements) {
+  // разблокировать-заблокировать элементы
+
+  function changeDisableStatus(elements, flag) {
     for (var i = 0; i < elements.length; i++) {
-      elements[i].removeAttribute('disabled', 'disabled');
-    }
-  };
-
-  // закрыть элемент на странице
-  function closeElement(element) {
-    if (element) {
-      element.remove();
+      elements[i].disabled = flag;
     }
   }
 
   window.utils = {
-    activateElements: activateElements,
-    closeElement: closeElement
+    changeDisableStatus: changeDisableStatus
   };
 
 })();

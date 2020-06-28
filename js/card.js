@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-  var ESCAPE = 27;
   var IMG_WIDTH = 45;
   var IMG_HEIGHT = 40;
   var IMG_ALT = 'Фотография жилья';
@@ -45,7 +44,7 @@
     }
   }
 
-  function createCard(offer) {
+  function createCard(offer, closeHandler) {
     var cardAd = cardTemplate.cloneNode(true);
     cardAd.querySelector('.popup__avatar').src = offer.author.avatar || 'no value';
 
@@ -73,32 +72,23 @@
       }
     });
 
+    if (closeHandler && typeof closeHandler === 'function') {
+      cardAd.querySelector('.popup__close').addEventListener('click', closeHandler);
+    }
+
     return cardAd;
   }
 
-  function closeCard(card) {
-    card.querySelector('.popup__close').addEventListener('click', function () {
+  function removeCard() {
+    var card = document.querySelector('.popup');
+    if (card) {
       card.remove();
-      document.removeEventListener('keypress', onEscPress);
-    });
-  }
-
-  function onEscPress(evt) {
-    if (evt.keyCode === ESCAPE) {
-      var card = document.querySelector('.popup');
-      if (card) {
-        evt.preventDefault();
-        card.remove();
-      }
-      document.removeEventListener('keypress', onEscPress);
     }
   }
 
-
   window.card = {
     createCard: createCard,
-    closeCard: closeCard,
-    onEscPress: onEscPress,
+    removeCard: removeCard
   };
 
 })();

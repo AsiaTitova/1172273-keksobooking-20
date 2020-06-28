@@ -4,8 +4,11 @@
   var MAIN_MARKER_WIDTH = 62;
   var MAIN_MARKER_HEIGHT = 62;
   var MAIN_MARKER_TIP_HEIGHT = 22;
+  var LEFT_MOUSE_BUTTON = 1;
+  var ENTER = 13;
 
   var map = document.querySelector('.map');
+  var mainPin = map.querySelector('.map__pin--main');
 
   // переводим страницу в неактивное состояние
 
@@ -16,6 +19,32 @@
   // переводим карту в активное состояние
   function activateMap() {
     map.classList.remove('map--faded');
+  }
+
+  // добавление событий на главную метку
+
+  function setMousedownListener(callback) {
+    mainPin.addEventListener('mousedown', function (evt) {
+      if (evt.which === LEFT_MOUSE_BUTTON) {
+        evt.preventDefault();
+        callback();
+      }
+    });
+  }
+
+  function setKeydownListener(callback) {
+    mainPin.addEventListener('mousedown', function (evt) {
+      if (evt.which === ENTER) {
+        evt.preventDefault();
+        callback();
+      }
+    });
+  }
+
+  // добавление элементов на карту (пины, карточки объявлений)
+
+  function addElement(element) {
+    map.appendChild(element);
   }
 
   // определяем координаты главной метки на карте
@@ -100,6 +129,9 @@
   window.map = {
     activateMap: activateMap,
     deactivateMap: deactivateMap,
-    getPositionPin: getPositionPin
+    getPositionPin: getPositionPin,
+    addElement: addElement,
+    setMousedownListener: setMousedownListener,
+    setKeydownListener: setKeydownListener
   };
 })();

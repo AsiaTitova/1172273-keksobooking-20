@@ -12,16 +12,14 @@
   // заблокировать активные поля формы
 
   function disableForm() {
-    for (var i = 0; i < formFieldset.length; i++) {
-      formFieldset[i].setAttribute('disabled', 'disabled');
-    }
+    window.utils.changeDisableStatus(formFieldset, true);
   }
 
   // переводим форму в активное состояние
 
   function activateForm() {
     form.classList.remove('ad-form--disabled');
-    window.utils.activateElements(formFieldset);
+    window.utils.changeDisableStatus(formFieldset, false);
   }
 
   // заполнение полей адерса
