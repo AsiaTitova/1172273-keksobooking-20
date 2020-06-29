@@ -1,16 +1,13 @@
 'use strict';
 
 (function () {
-  var LEFT_MOUSE_BUTTON = 1;
-  var ENTER = 13;
-  var ESCAPE = 27;
 
-  var submitForm = document.querySelector('.ad-form__submit');
+  var ESCAPE = 27;
 
   function deactivationPage() {
     window.map.deactivateMap();
     window.form.disableForm();
-    window.form.fillAddress();
+    window.form.fillAddress(window.map.getPositionPin());
   }
 
   deactivationPage();
@@ -32,8 +29,15 @@
     adverts.forEach(function (ad) {
       var pinElement = window.createPin(ad, function (evt) {
         evt.preventDefault();
-        window.card.removeCard();
-        var card = window.card.createCard(ad, window.card.removeCard);
+        function removeCard() {
+          var card = document.querySelector('.popup');
+          if (card) {
+            card.remove();
+            document.addEventListener('keydown', onEscPress);
+          }
+        }
+        removeCard();
+        var card = window.card.createCard(ad, removeCard);
         document.addEventListener('keydown', onEscPress);
         window.map.addElement(card);
       });
@@ -50,21 +54,7 @@
   }
   // переход страницы в неактивное состояние после отправки формы
 
-  // нажатием левой кнопки мыши
-  submitForm.addEventListener('mousedown', function (evt) {
-    if (evt.which === LEFT_MOUSE_BUTTON) {
-      evt.preventDefault();
-      deactivationPage();
-    }
-  });
-
-  // нажатием клавиши Enter
-  submitForm.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === ENTER) {
-      evt.preventDefault();
-      deactivationPage();
-    }
-  });
+  window.form.setSubmitListener(deactivationPage);
 
 })();
 

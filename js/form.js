@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var LEFT_MOUSE_BUTTON = 1;
+  var ENTER = 13;
   var MIN_PRICE_BUNGALO = 0;
   var MIN_PRICE_FLAT = 1000;
   var MIN_PRICE_HOUSE = 5000;
@@ -8,6 +10,7 @@
 
   var form = document.querySelector('.ad-form');
   var formFieldset = form.querySelectorAll('.ad-form__element');
+  var submitForm = document.querySelector('.ad-form__submit');
 
   // заблокировать активные поля формы
 
@@ -24,9 +27,9 @@
 
   // заполнение полей адерса
 
-  function fillAddress() {
+  function fillAddress(coordinates) {
     var address = form.querySelector('#address');
-    address.value = window.map.getPositionPin();
+    address.value = coordinates;
   }
 
   // валидация формы
@@ -91,10 +94,22 @@
     }
   });
 
+  // событие отправка формы
+
+  function setSubmitListener(callback) {
+    submitForm.addEventListener('mousedown', function (evt) {
+      if (evt.which === ENTER || evt.which === LEFT_MOUSE_BUTTON) {
+        evt.preventDefault();
+        callback();
+      }
+    });
+  }
+
   window.form = {
     activateForm: activateForm,
     disableForm: disableForm,
-    fillAddress: fillAddress
+    fillAddress: fillAddress,
+    setSubmitListener: setSubmitListener
   };
 })();
 
