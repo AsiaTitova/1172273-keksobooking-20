@@ -4,16 +4,15 @@
   var MAIN_MARKER_WIDTH = 62;
   var MAIN_MARKER_HEIGHT = 62;
   var MAIN_MARKER_TIP_HEIGHT = 22;
-  var MAP_START_Y = 130;
-  var MAP_END_Y = 630;
-  var MAP_START_X = 0;
-  var MAP_END_X = 1200;
+  var MIN_Y = 130 - (MAIN_MARKER_HEIGHT + MAIN_MARKER_TIP_HEIGHT);
+  var MAX_Y = 630 - (MAIN_MARKER_HEIGHT + MAIN_MARKER_TIP_HEIGHT);
+  var MAX_X = 1200 - MAIN_MARKER_WIDTH / 2;
+  var MIN_X = 0 - MAIN_MARKER_WIDTH / 2;
   var LEFT_MOUSE_BUTTON = 1;
   var ENTER = 13;
 
   var map = document.querySelector('.map');
   var mainPin = map.querySelector('.map__pin--main');
-  var mapPins = map.querySelector('.map__pins');
 
   // переводим страницу в неактивное состояние
 
@@ -107,31 +106,20 @@
       };
 
       function getNewCoords(coordinates) {
-
-        // Проверка границ перемещения пина
-        var minY = MAP_START_Y - (MAIN_MARKER_HEIGHT + MAIN_MARKER_TIP_HEIGHT);
-        var maxY = MAP_END_Y - (MAIN_MARKER_HEIGHT + MAIN_MARKER_TIP_HEIGHT);
-
-        if (coordinates.x < MAP_START_X) {
-          coordinates.x = MAP_START_X;
-        } else if (coordinates.x > MAP_END_X) {
-          coordinates.x = MAP_END_X;
-        }
-
-        if (coordinates.y < minY) {
-          coordinates.y = minY;
-        } else if (coordinates.y > maxY) {
-          coordinates.y = maxY;
-        }
-
+        mainPin.style.left = coordinates.x + 'px';
+        mainPin.style.top = coordinates.y + 'px';
         return coordinates.x + ', ' + coordinates.y;
       }
 
       var newCoords = getNewCoords(newPinMainPosition);
+      if (newCoords.x < MAX_X && newCoords.x > MIN_X) {
+        mainPin.style.left = newPinMainPosition.x + 'px';
+      }
+      if (newCoords.y < MAX_Y && newCoords.y > MIN_Y) {
+        mainPin.style.top = newPinMainPosition.y + 'px';
+      }
 
-      mainPin.style.left = newPinMainPosition.x + 'px';
-      mainPin.style.top = newPinMainPosition.y + 'px';
-      window.form.fillAddress(newCoords);
+      window.form.fillAddress(getPositionPin());
 
     };
 
