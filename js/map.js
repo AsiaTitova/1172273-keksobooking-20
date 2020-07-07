@@ -1,9 +1,11 @@
 'use strict';
 
 (function () {
-  var MAIN_MARKER_WIDTH = 62;
-  var MAIN_MARKER_HEIGHT = 62;
   var MAIN_MARKER_TIP_HEIGHT = 22;
+  var MIN_Y = 130;
+  var MAX_Y = 630;
+  var MIN_X = 0;
+  var MAX_X = 1200;
   var LEFT_MOUSE_BUTTON = 1;
   var ENTER = 13;
 
@@ -58,11 +60,11 @@
     var positionX = pin.offsetLeft;
 
     if (map.classList.contains('map--faded')) {
-      var coordinateX = Math.round(positionX + MAIN_MARKER_WIDTH / 2);
-      var coordinateY = Math.round(positionY + MAIN_MARKER_HEIGHT / 2);
+      var coordinateX = Math.round(positionX + mainPin.offsetWidth / 2);
+      var coordinateY = Math.round(positionY + mainPin.offsetHeight / 2);
     } else {
-      coordinateX = Math.round(positionX + MAIN_MARKER_WIDTH / 2);
-      coordinateY = Math.round(positionY + MAIN_MARKER_HEIGHT + MAIN_MARKER_TIP_HEIGHT);
+      coordinateX = Math.round(positionX + mainPin.offsetWidth / 2);
+      coordinateY = Math.round(positionY + mainPin.offsetHeight + MAIN_MARKER_TIP_HEIGHT);
     }
     var coordinates = coordinateX + ', ' + coordinateY;
     return coordinates;
@@ -70,61 +72,75 @@
 
   // перемещение основной метки по карте
 
-  // (function () {
-  //   var pinMain = map.querySelector('.map__pin--main');
+  mainPin.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
 
-  //   pinMain.addEventListener('mousedown', function (evt) {
-  //     evt.preventDefault();
+    // начальные координаты
+    var startCoords = {
+      x: evt.clientX,
+      y: evt.clientY
+    };
 
-  //     // начальные координаты
-  //     var startCoords = {
-  //       x: evt.clientX,
-  //       y: evt.clientY
-  //     };
+    var dragged = false;
 
-  //     var dragged = false;
+    // функция передвижения пина
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
+      dragged = true;
 
-  //     // функция передвижения пина
-  //     var onMouseMove = function (moveEvt) {
-  //       moveEvt.preventDefault();
-  //       dragged = true;
+      var shift = {
+        x: startCoords.x - moveEvt.clientX,
+        y: startCoords.y - moveEvt.clientY
+      };
 
-  //       var shift = {
-  //         x: startCoords.x - moveEvt.clientX,
-  //         y: startCoords.y - moveEvt.clientY
-  //       };
+      startCoords = {
+        x: moveEvt.clientX,
+        y: moveEvt.clientY
+      };
 
-  //       startCoords = {
-  //         x: moveEvt.clientX,
-  //         y: moveEvt.clientY
-  //       };
+      var newPinMainPosition = {
+        x: mainPin.offsetLeft - shift.x,
+        y: mainPin.offsetTop - shift.y
+      };
 
-  //       map.style.top = (map.offsetTop - shift.y) + 'px';
-  //       map.style.left = (map.offsetLeft - shift.x) + 'px';
+      function getNewCoords(coordinates) {
+        return {
+          x: coordinates.x + mainPin.offsetWidth / 2,
+          y: coordinates.y + (mainPin.offsetHeight + MAIN_MARKER_TIP_HEIGHT)
+        };
+      }
+      var newCoords = getNewCoords(newPinMainPosition);
 
-  //     };
+      if (newCoords.x <= MAX_X && newCoords.x >= MIN_X) {
+        mainPin.style.left = newPinMainPosition.x + 'px';
+      }
+      if (newCoords.y <= MAX_Y && newCoords.y >= MIN_Y) {
+        mainPin.style.top = newPinMainPosition.y + 'px';
+      }
 
-  //     // функция установки пина при отпускании кнопки мыши
-  //     var onMouseUp = function (upEvt) {
-  //       upEvt.preventDefault();
+      window.form.fillAddress(getPositionPin());
+    };
 
-  //       document.removeEventListener('mousemove', onMouseMove);
-  //       document.removeEventListener('mouseup', onMouseUp);
+    // функция установки пина при отпускании кнопки мыши
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
 
-  //       if (dragged) {
-  //         var onClickPreventDefault = function (clickEvt) {
-  //           clickEvt.preventDefault();
-  //           pinMain.removeEventListener('click', onClickPreventDefault);
-  //         };
-  //         pinMain.addEventListener('click', onClickPreventDefault);
-  //       }
-  //     };
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
 
-  //     document.addEventListener('mousemove', onMouseMove);
-  //     document.addEventListener('mouseup', onMouseUp);
-  //   });
+      if (dragged) {
+        var onClickPreventDefault = function (clickEvt) {
+          clickEvt.preventDefault();
+          mainPin.removeEventListener('click', onClickPreventDefault);
+        };
+        mainPin.addEventListener('click', onClickPreventDefault);
+      }
+    };
 
-  // })();
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  });
+
 
   window.map = {
     activateMap: activateMap,
