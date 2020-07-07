@@ -1,13 +1,11 @@
 'use strict';
 
 (function () {
-  var MAIN_MARKER_WIDTH = 62;
-  var MAIN_MARKER_HEIGHT = 62;
   var MAIN_MARKER_TIP_HEIGHT = 22;
-  var MIN_Y = 130 - (MAIN_MARKER_HEIGHT + MAIN_MARKER_TIP_HEIGHT);
-  var MAX_Y = 630 - (MAIN_MARKER_HEIGHT + MAIN_MARKER_TIP_HEIGHT);
-  var MAX_X = 1200 - MAIN_MARKER_WIDTH / 2;
-  var MIN_X = 0 - MAIN_MARKER_WIDTH / 2;
+  var MIN_Y = 130;
+  var MAX_Y = 630;
+  var MIN_X = 0;
+  var MAX_X = 1200;
   var LEFT_MOUSE_BUTTON = 1;
   var ENTER = 13;
 
@@ -62,11 +60,11 @@
     var positionX = pin.offsetLeft;
 
     if (map.classList.contains('map--faded')) {
-      var coordinateX = Math.round(positionX + MAIN_MARKER_WIDTH / 2);
-      var coordinateY = Math.round(positionY + MAIN_MARKER_HEIGHT / 2);
+      var coordinateX = Math.round(positionX + mainPin.offsetWidth / 2);
+      var coordinateY = Math.round(positionY + mainPin.offsetHeight / 2);
     } else {
-      coordinateX = Math.round(positionX + MAIN_MARKER_WIDTH / 2);
-      coordinateY = Math.round(positionY + MAIN_MARKER_HEIGHT + MAIN_MARKER_TIP_HEIGHT);
+      coordinateX = Math.round(positionX + mainPin.offsetWidth / 2);
+      coordinateY = Math.round(positionY + mainPin.offsetHeight + MAIN_MARKER_TIP_HEIGHT);
     }
     var coordinates = coordinateX + ', ' + coordinateY;
     return coordinates;
@@ -106,21 +104,21 @@
       };
 
       function getNewCoords(coordinates) {
-        mainPin.style.left = coordinates.x + 'px';
-        mainPin.style.top = coordinates.y + 'px';
-        return coordinates.x + ', ' + coordinates.y;
+        return {
+          x: coordinates.x - mainPin.offsetWidth / 2 + 'px',
+          y: coordinates.y - (mainPin.offsetHeight + MAIN_MARKER_TIP_HEIGHT) + 'px'
+        };
       }
-
       var newCoords = getNewCoords(newPinMainPosition);
-      if (newCoords.x < MAX_X && newCoords.x > MIN_X) {
-        mainPin.style.left = newPinMainPosition.x + 'px';
+
+      if (newCoords.x <= MAX_X && newCoords.x >= MIN_X) {
+        mainPin.style.left = newCoords.x + 'px';
       }
-      if (newCoords.y < MAX_Y && newCoords.y > MIN_Y) {
+      if (newCoords.y <= MAX_Y && newCoords.y >= MIN_Y) {
         mainPin.style.top = newPinMainPosition.y + 'px';
       }
 
       window.form.fillAddress(getPositionPin());
-
     };
 
     // функция установки пина при отпускании кнопки мыши
