@@ -105,14 +105,14 @@
 
       function getNewCoords(coordinates) {
         return {
-          x: coordinates.x - mainPin.offsetWidth / 2 + 'px',
-          y: coordinates.y - (mainPin.offsetHeight + MAIN_MARKER_TIP_HEIGHT) + 'px'
+          x: coordinates.x + mainPin.offsetWidth / 2,
+          y: coordinates.y + (mainPin.offsetHeight + MAIN_MARKER_TIP_HEIGHT)
         };
       }
       var newCoords = getNewCoords(newPinMainPosition);
 
       if (newCoords.x <= MAX_X && newCoords.x >= MIN_X) {
-        mainPin.style.left = newCoords.x + 'px';
+        mainPin.style.left = newPinMainPosition.x + 'px';
       }
       if (newCoords.y <= MAX_Y && newCoords.y >= MIN_Y) {
         mainPin.style.top = newPinMainPosition.y + 'px';
