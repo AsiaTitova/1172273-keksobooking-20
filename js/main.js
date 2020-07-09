@@ -16,7 +16,7 @@
   function activatePage() {
     window.map.activateMap();
     window.form.activateForm();
-    renderPins(window.announcements);
+    window.server.loadData(renderPins, window.form.adErrorMessage);
   }
 
   // нажатием левой кнопки мыши и кнопки enter на основной пин
@@ -29,13 +29,6 @@
     adverts.forEach(function (ad) {
       var pinElement = window.createPin(ad, function (evt) {
         evt.preventDefault();
-        function removeCard() {
-          var card = document.querySelector('.popup');
-          if (card) {
-            card.remove();
-            document.addEventListener('keydown', onEscPress);
-          }
-        }
         removeCard();
         var card = window.card.createCard(ad, removeCard);
         document.addEventListener('keydown', onEscPress);
@@ -46,6 +39,14 @@
     window.map.addElement(fragment);
   }
 
+  function removeCard() {
+    var card = document.querySelector('.popup');
+    if (card) {
+      card.remove();
+      document.addEventListener('keydown', onEscPress);
+    }
+  }
+
   function onEscPress(evt) {
     if (evt.keyCode === ESCAPE) {
       window.card.removeCard();
@@ -54,7 +55,7 @@
   }
   // переход страницы в неактивное состояние после отправки формы
 
-  window.form.setSubmitListener(deactivationPage);
+  // window.form.setSubmitListener(deactivationPage);
 
 })();
 

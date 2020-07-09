@@ -3,14 +3,19 @@
 (function () {
   var LEFT_MOUSE_BUTTON = 1;
   var ENTER = 13;
+  var ESC = 27;
   var MIN_PRICE_BUNGALO = 0;
   var MIN_PRICE_FLAT = 1000;
   var MIN_PRICE_HOUSE = 5000;
   var MIN_PRICE_PALACE = 10000;
 
+  var main = document.querySelector('.page__main');
   var form = document.querySelector('.ad-form');
   var formFieldset = form.querySelectorAll('.ad-form__element');
   var submitForm = document.querySelector('.ad-form__submit');
+  var successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
+  var success = document.querySelector('.success');
+  var errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
 
   // заблокировать активные поля формы
 
@@ -94,6 +99,8 @@
     }
   });
 
+  // отправка формы, работа с сервером
+
   // событие отправка формы
 
   function setSubmitListener(callback) {
@@ -105,11 +112,75 @@
     });
   }
 
+  // отриcовка сообщения об успешной отправке формы
+
+  function adSuccessMessage() {
+    successMessageTemplate.cloneNode(true);
+    main.appendChild(successMessageTemplate);
+    removeSuccessMessage();
+  }
+
+  // закрытие сообщения об успешной отправке формы
+
+  function removeSuccessMessage() {
+    success.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === ESC) {
+        evt.preventDefault();
+        if (success) {
+          success.remove();
+        }
+      }
+    });
+  }
+
+  // отрисовка соообщения об ошибке
+
+  function adErrorMessage() {
+    var errorMessage = errorMessageTemplate.cloneNode(true);
+    main.appendChild(errorMessage);
+
+    var errorBlock = errorMessage.querySelector('.error');
+    var errorButton = errorMessage.querySelector('.error__button');
+
+    removeErrorMessageButtonHandler(errorButton, errorBlock);
+    removeErrorMessageEscHandler(errorButton, errorBlock);
+  }
+
+  function removeErrorMessageButtonHandler(error, block) {
+    error.addEventListener('click', function (evt) {
+      evt.preventDefault();
+      if (block) {
+        block.remove();
+      }
+    });
+  }
+
+  function removeErrorMessageEscHandler(error, block) {
+    error.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === ESC) {
+        evt.preventDefault();
+        if (block) {
+          block.remove();
+        }
+      }
+    });
+  }
+
+  // form.addEventListener('submit', function (evt) {
+  //   window.upload(new FormData(form), function () {
+  //     adSuccessMessage();
+  //   });
+  //   evt.preventDefault();
+  // });
+
+
   window.form = {
     activateForm: activateForm,
     disableForm: disableForm,
     fillAddress: fillAddress,
-    setSubmitListener: setSubmitListener
+    setSubmitListener: setSubmitListener,
+    adSuccessMessage: adSuccessMessage,
+    adErrorMessage: adErrorMessage
   };
 })();
 
