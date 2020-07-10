@@ -6,28 +6,14 @@
   var main = document.querySelector('.page__main');
 
   var successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
-  var success = document.querySelector('.success');
   var errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
 
   // отриcовка сообщения об успешной отправке формы
 
   function adSuccessMessage() {
-    successMessageTemplate.cloneNode(true);
+    var successMessage = successMessageTemplate.cloneNode(true);
     main.appendChild(successMessageTemplate);
-    setRemoveSuccessPopup();
-  }
-
-  // закрытие сообщения об успешной отправке формы
-
-  function setRemoveSuccessPopup() {
-    success.addEventListener('keydown', function (evt) {
-      if (evt.keyCode === ESC) {
-        evt.preventDefault();
-        if (success) {
-          success.remove();
-        }
-      }
-    });
+    setRemovePopupHandler(successMessage);
   }
 
   // отрисовка соообщения об ошибке
@@ -36,14 +22,13 @@
     var errorMessage = errorMessageTemplate.cloneNode(true);
     main.appendChild(errorMessage);
 
-    var errorBlock = errorMessage.querySelector('.error');
     var errorButton = errorMessage.querySelector('.error__button');
 
-    setRemoveErrorMessageButtonHandler(errorButton, errorBlock);
-    setRemoveErrorMessageEscHandler(errorButton, errorBlock);
+    setRemoveErrorPopupButtonHandler(errorButton, errorMessage);
+    setRemovePopupHandler(errorMessage);
   }
 
-  function setRemoveErrorMessageButtonHandler(error, block) {
+  function setRemoveErrorPopupButtonHandler(error, block) {
     error.addEventListener('click', function (evt) {
       evt.preventDefault();
       if (block) {
@@ -52,12 +37,15 @@
     });
   }
 
-  function setRemoveErrorMessageEscHandler(error, block) {
+  // функция закрытия popup нажатием кнопки Esc
+
+  function setRemovePopupHandler(block) {
     document.addEventListener('keydown', function (evt) {
       if (evt.keyCode === ESC) {
         evt.preventDefault();
         if (block) {
           block.remove();
+          document.removeEventListener('keydown', setRemovePopupHandler);
         }
       }
     });
