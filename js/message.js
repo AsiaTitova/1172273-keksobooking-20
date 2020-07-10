@@ -12,7 +12,7 @@
 
   function adSuccessMessage() {
     var successMessage = successMessageTemplate.cloneNode(true);
-    main.appendChild(successMessageTemplate);
+    main.appendChild(successMessage);
     setRemovePopupHandler(successMessage);
   }
 
@@ -40,12 +40,12 @@
   // функция закрытия popup нажатием кнопки Esc
 
   function setRemovePopupHandler(block) {
-    document.addEventListener('keydown', function (evt) {
+    document.addEventListener('keydown', function setEscPressHandler(evt) {
       if (evt.keyCode === ESC) {
         evt.preventDefault();
         if (block) {
           block.remove();
-          document.removeEventListener('keydown', setRemovePopupHandler);
+          document.removeEventListener('keydown', setEscPressHandler);
         }
       }
     });
