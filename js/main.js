@@ -55,7 +55,7 @@
   }
   // переход страницы в неактивное состояние после отправки формы
 
-  // window.form.setSubmitListener(deactivationPage);
+  window.form.setSubmitListener(deactivationPage);
 
 })();
 
