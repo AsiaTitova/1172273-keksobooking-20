@@ -4,47 +4,37 @@
 
   var ESCAPE = 27;
 
-  function deactivationPage() {
+  function deactivatеPage() {
     window.map.deactivateMap();
     window.form.disableForm();
     window.form.fillAddress(window.map.getPositionPin());
   }
 
-  deactivationPage();
+  deactivatеPage();
 
   // переводим страницу в активное состояние
   function activatePage() {
     window.map.activateMap();
     window.form.activateForm();
-    window.server.loadData(renderPins, window.form.adErrorMessage);
+    window.server.loadData(renderPins, window.message.addErrorMessage);
   }
 
   // нажатием левой кнопки мыши и кнопки enter на основной пин
-  window.map.setMousedownListener(activatePage);
-  window.map.setKeydownListener(activatePage);
-
+  window.map.setClickMainPinListener(activatePage);
 
   function renderPins(adverts) {
     var fragment = document.createDocumentFragment();
     adverts.forEach(function (ad) {
-      var pinElement = window.createPin(ad, function (evt) {
+      var pinElement = window.pin.createPin(ad, function (evt) {
         evt.preventDefault();
-        removeCard();
-        var card = window.card.createCard(ad, removeCard);
+        window.card.removeCard();
+        var card = window.card.createCard(ad, window.card.removeCard);
         document.addEventListener('keydown', onEscPress);
         window.map.addElement(card);
       });
       fragment.appendChild(pinElement);
     });
     window.map.addElement(fragment);
-  }
-
-  function removeCard() {
-    var card = document.querySelector('.popup');
-    if (card) {
-      card.remove();
-      document.addEventListener('keydown', onEscPress);
-    }
   }
 
   function onEscPress(evt) {
@@ -55,7 +45,17 @@
   }
   // переход страницы в неактивное состояние после отправки формы
 
-  window.form.setSubmitListener(window.message.adErrorMessage);
+  function setSubmitButtonHandler() {
+    window.form.sendDataServer();
+    window.form.clearForm();
+    window.pin.removePins();
+    window.card.removeCard();
+    window.map.returnMainPinCenterMap();
+    deactivatеPage();
+  }
+
+  window.form.setSubmitListener(setSubmitButtonHandler);
+
 
 })();
 

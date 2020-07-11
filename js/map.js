@@ -6,8 +6,6 @@
   var MAX_Y = 630;
   var MIN_X = 0;
   var MAX_X = 1200;
-  var LEFT_MOUSE_BUTTON = 1;
-  var ENTER = 13;
 
   var map = document.querySelector('.map');
   var mainPin = map.querySelector('.map__pin--main');
@@ -25,21 +23,10 @@
 
   // добавление событий на главную метку
 
-  function setMousedownListener(callback) {
-    mainPin.addEventListener('mousedown', function (evt) {
-      if (evt.which === LEFT_MOUSE_BUTTON) {
-        evt.preventDefault();
-        callback();
-      }
-    });
-  }
-
-  function setKeydownListener(callback) {
-    mainPin.addEventListener('mousedown', function (evt) {
-      if (evt.which === ENTER) {
-        evt.preventDefault();
-        callback();
-      }
+  function setClickMainPinListener(callback) {
+    mainPin.addEventListener('click', function (evt) {
+      evt.preventDefault();
+      callback();
     });
   }
 
@@ -141,13 +128,20 @@
     document.addEventListener('mouseup', onMouseUp);
   });
 
+  // возвращение основного пина в центр карты
+
+  function returnMainPinCenterMap() {
+    mainPin.style.left = map.offsetWidth / 2 + 'px';
+    mainPin.style.top = map.offsetHeight / 2 + 'px';
+  }
+
 
   window.map = {
     activateMap: activateMap,
     deactivateMap: deactivateMap,
     getPositionPin: getPositionPin,
     addElement: addElement,
-    setMousedownListener: setMousedownListener,
-    setKeydownListener: setKeydownListener
+    setClickMainPinListener: setClickMainPinListener,
+    returnMainPinCenterMap: returnMainPinCenterMap
   };
 })();

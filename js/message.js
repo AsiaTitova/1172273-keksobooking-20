@@ -5,54 +5,48 @@
 
   var main = document.querySelector('.page__main');
 
-  var successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
-  var errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
+  var successMessagePopup = document.querySelector('#success').content.querySelector('.success');
+  var errorMessagePopup = document.querySelector('#error').content.querySelector('.error');
 
   // отриcовка сообщения об успешной отправке формы
 
-  function adSuccessMessage() {
-    var successMessage = successMessageTemplate.cloneNode(true);
-    main.appendChild(successMessage);
-    setRemovePopupHandler(successMessage);
+  function addSuccessMessage() {
+    main.appendChild(successMessagePopup);
+    setRemovePopupButtonHandler(successMessagePopup, successMessagePopup);
+    document.addEventListener('keydown', escPressHandler);
   }
 
   // отрисовка соообщения об ошибке
 
-  function adErrorMessage() {
-    var errorMessage = errorMessageTemplate.cloneNode(true);
-    main.appendChild(errorMessage);
+  function addErrorMessage() {
+    main.appendChild(errorMessagePopup);
 
-    var errorButton = errorMessage.querySelector('.error__button');
-
-    setRemoveErrorPopupButtonHandler(errorButton, errorMessage);
-    setRemovePopupHandler(errorMessage);
+    var errorButton = errorMessagePopup.querySelector('.error__button');
+    setRemovePopupButtonHandler(errorButton, errorMessagePopup);
+    document.addEventListener('keydown', escPressHandler);
   }
 
-  function setRemoveErrorPopupButtonHandler(error, block) {
-    error.addEventListener('click', function (evt) {
+  function setRemovePopupButtonHandler(block, popup) {
+    block.addEventListener('click', function (evt) {
       evt.preventDefault();
-      if (block) {
-        block.remove();
+      if (popup) {
+        popup.remove();
+        document.removeEventListener('keydown', escPressHandler);
       }
     });
   }
 
-  // функция закрытия popup нажатием кнопки Esc
-
-  function setRemovePopupHandler(block) {
-    document.addEventListener('keydown', function setEscPressHandler(evt) {
-      if (evt.keyCode === ESC) {
-        evt.preventDefault();
-        if (block) {
-          block.remove();
-          document.removeEventListener('keydown', setEscPressHandler);
-        }
-      }
-    });
+  function escPressHandler(evt) {
+    if (evt.keyCode === ESC) {
+      evt.preventDefault();
+      errorMessagePopup.remove();
+      successMessagePopup.remove();
+      document.removeEventListener('keydown', escPressHandler);
+    }
   }
 
   window.message = {
-    adSuccessMessage: adSuccessMessage,
-    adErrorMessage: adErrorMessage
+    addSuccessMessage: addSuccessMessage,
+    addErrorMessage: addErrorMessage
   };
 })();

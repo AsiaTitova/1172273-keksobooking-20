@@ -1,8 +1,6 @@
 'use strict';
 
 (function () {
-  var LEFT_MOUSE_BUTTON = 1;
-  var ENTER = 13;
   var MIN_PRICE_BUNGALO = 0;
   var MIN_PRICE_FLAT = 1000;
   var MIN_PRICE_HOUSE = 5000;
@@ -11,6 +9,7 @@
   var form = document.querySelector('.ad-form');
   var formFieldset = form.querySelectorAll('.ad-form__element');
   var submitForm = document.querySelector('.ad-form__submit');
+  var resetForm = document.querySelector('.ad-form__reset');
 
   // заблокировать активные поля формы
 
@@ -99,27 +98,47 @@
   // событие отправка формы
 
   function setSubmitListener(callback) {
-    submitForm.addEventListener('mousedown', function (evt) {
-      if (evt.which === ENTER || evt.which === LEFT_MOUSE_BUTTON) {
-        evt.preventDefault();
-        callback();
-      }
+    form.addEventListener('submit', function (evt) {
+      evt.preventDefault();
+      callback();
     });
   }
 
-  // form.addEventListener('submit', function (evt) {
-  //   window.upload(new FormData(form), function () {
-  //     adSuccessMessage();
-  //   });
-  //   evt.preventDefault();
-  // });
+  // отчистка формы
+  function clearForm() {
+    form.reset();
+  }
 
+  // отчистка формы нажатием на кнопку отчистить
+
+  function setResetFormButtonHandler() {
+    resetForm.addEventListener('click', function (evt) {
+      evt.preventDefault();
+      clearForm();
+      window.pin.removePins();
+      window.card.removeCard();
+      window.map.deactivateMap();
+      window.map.returnMainPinCenterMap();
+      fillAddress(window.map.getPositionPin());
+      disableForm();
+    });
+  }
+  setResetFormButtonHandler();
+
+  // отправка данных на сервер
+
+  function sendDataServer() {
+    window.server.upload(window.message.addSuccessMessage, window.message.addErrorMessage, new FormData(form));
+  }
 
   window.form = {
     activateForm: activateForm,
     disableForm: disableForm,
     fillAddress: fillAddress,
-    setSubmitListener: setSubmitListener
+    setSubmitListener: setSubmitListener,
+    clearForm: clearForm,
+    sendDataServer: sendDataServer,
+    submitForm: submitForm
   };
 })();
 

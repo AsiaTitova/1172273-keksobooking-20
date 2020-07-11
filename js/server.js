@@ -12,7 +12,7 @@
     OK: 200
   };
 
-  function load(url, method, onSuccess, onError) {
+  function load(url, method, onSuccess, onError, data) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
@@ -34,15 +34,15 @@
     xhr.timeout = TIMEOUT_IN_MS;
 
     xhr.open(method, url);
-    xhr.send();
+    xhr.send(data);
   }
 
   function loadData(onSuccess, onError) {
     load(URL_LOAD, METHOD_LOAD, onSuccess, onError);
   }
 
-  function uploadData(onSuccess, onError) {
-    load(URL_UPLOAD, METHOD_UPLOAD, onSuccess, onError);
+  function uploadData(onSuccess, onError, data) {
+    load(URL_UPLOAD, METHOD_UPLOAD, onSuccess, onError, data);
   }
 
   window.server = {
