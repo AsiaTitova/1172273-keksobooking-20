@@ -1,8 +1,6 @@
 'use strict';
 
 (function () {
-  var LEFT_MOUSE_BUTTON = 1;
-  var ENTER = 13;
   var MIN_PRICE_BUNGALO = 0;
   var MIN_PRICE_FLAT = 1000;
   var MIN_PRICE_HOUSE = 5000;
@@ -10,12 +8,13 @@
 
   var form = document.querySelector('.ad-form');
   var formFieldset = form.querySelectorAll('.ad-form__element');
-  var submitForm = document.querySelector('.ad-form__submit');
+  var resetForm = document.querySelector('.ad-form__reset');
 
-  // заблокировать активные поля формы
+  // заблокировать активные поля формы и её отчистка
 
   function disableForm() {
     window.utils.changeDisableStatus(formFieldset, true);
+    clearForm();
   }
 
   // переводим форму в активное состояние
@@ -94,14 +93,32 @@
     }
   });
 
+  // отправка формы, работа с сервером
+
+  function getFormData() {
+    return new FormData(form);
+  }
+
   // событие отправка формы
 
   function setSubmitListener(callback) {
-    submitForm.addEventListener('mousedown', function (evt) {
-      if (evt.which === ENTER || evt.which === LEFT_MOUSE_BUTTON) {
-        evt.preventDefault();
-        callback();
-      }
+    form.addEventListener('submit', function (evt) {
+      evt.preventDefault();
+      callback();
+    });
+  }
+
+  // отчистка формы
+  function clearForm() {
+    form.reset();
+  }
+
+  // событие отчистка формы нажатием на кнопку отчистить
+
+  function setResetListener(callback) {
+    resetForm.addEventListener('click', function (evt) {
+      evt.preventDefault();
+      callback();
     });
   }
 
@@ -109,7 +126,9 @@
     activateForm: activateForm,
     disableForm: disableForm,
     fillAddress: fillAddress,
-    setSubmitListener: setSubmitListener
+    setSubmitListener: setSubmitListener,
+    setResetListener: setResetListener,
+    getFormData: getFormData
   };
 })();
 

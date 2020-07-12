@@ -18,5 +18,16 @@
     return pin;
   }
 
-  window.createPin = createPin;
+  function removePins() {
+    var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    pins.forEach(function (element) {
+      element.remove();
+    });
+  }
+
+  window.pin = {
+    createPin: createPin,
+    removePins: removePins
+  };
+
 })();

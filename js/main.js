@@ -4,40 +4,33 @@
 
   var ESCAPE = 27;
 
-  function deactivationPage() {
+  function deactivatеPage() {
     window.map.deactivateMap();
     window.form.disableForm();
     window.form.fillAddress(window.map.getPositionPin());
+    window.pin.removePins();
+    window.card.removeCard();
   }
 
-  deactivationPage();
+  deactivatеPage();
 
   // переводим страницу в активное состояние
   function activatePage() {
     window.map.activateMap();
     window.form.activateForm();
-    renderPins(window.announcements);
+    window.server.loadData(renderPins, window.message.addErrorMessage);
   }
 
   // нажатием левой кнопки мыши и кнопки enter на основной пин
-  window.map.setMousedownListener(activatePage);
-  window.map.setKeydownListener(activatePage);
-
+  window.map.setClickMainPinListener(activatePage);
 
   function renderPins(adverts) {
     var fragment = document.createDocumentFragment();
     adverts.forEach(function (ad) {
-      var pinElement = window.createPin(ad, function (evt) {
+      var pinElement = window.pin.createPin(ad, function (evt) {
         evt.preventDefault();
-        function removeCard() {
-          var card = document.querySelector('.popup');
-          if (card) {
-            card.remove();
-            document.addEventListener('keydown', onEscPress);
-          }
-        }
-        removeCard();
-        var card = window.card.createCard(ad, removeCard);
+        window.card.removeCard();
+        var card = window.card.createCard(ad, window.card.removeCard);
         document.addEventListener('keydown', onEscPress);
         window.map.addElement(card);
       });
@@ -54,7 +47,18 @@
   }
   // переход страницы в неактивное состояние после отправки формы
 
-  window.form.setSubmitListener(deactivationPage);
+  window.form.setSubmitListener(function () {
+    function onSuccess() {
+      window.message.addSuccessMessage();
+      deactivatеPage();
+    }
+    var data = window.form.getFormData();
+    window.server.uploadData(data, onSuccess, window.message.addErrorMessage);
+  });
+
+  // отчистка формы нажатием на кнопку отчистить
+  window.form.setResetListener(deactivatеPage);
+
 
 })();
 
