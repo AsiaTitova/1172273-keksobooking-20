@@ -14,6 +14,7 @@
 
   function deactivateMap() {
     map.classList.add('map--faded');
+    returnMainPinCenterMap();
   }
 
   // переводим карту в активное состояние
@@ -141,7 +142,6 @@
     deactivateMap: deactivateMap,
     getPositionPin: getPositionPin,
     addElement: addElement,
-    setClickMainPinListener: setClickMainPinListener,
-    returnMainPinCenterMap: returnMainPinCenterMap
+    setClickMainPinListener: setClickMainPinListener
   };
 })();

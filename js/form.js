@@ -8,13 +8,13 @@
 
   var form = document.querySelector('.ad-form');
   var formFieldset = form.querySelectorAll('.ad-form__element');
-  var submitForm = document.querySelector('.ad-form__submit');
   var resetForm = document.querySelector('.ad-form__reset');
 
-  // заблокировать активные поля формы
+  // заблокировать активные поля формы и её отчистка
 
   function disableForm() {
     window.utils.changeDisableStatus(formFieldset, true);
+    clearForm();
   }
 
   // переводим форму в активное состояние
@@ -95,6 +95,10 @@
 
   // отправка формы, работа с сервером
 
+  function getFormData() {
+    return new FormData(form);
+  }
+
   // событие отправка формы
 
   function setSubmitListener(callback) {
@@ -109,26 +113,13 @@
     form.reset();
   }
 
-  // отчистка формы нажатием на кнопку отчистить
+  // событие отчистка формы нажатием на кнопку отчистить
 
-  function setResetFormButtonHandler() {
+  function setResetListener(callback) {
     resetForm.addEventListener('click', function (evt) {
       evt.preventDefault();
-      clearForm();
-      window.pin.removePins();
-      window.card.removeCard();
-      window.map.deactivateMap();
-      window.map.returnMainPinCenterMap();
-      fillAddress(window.map.getPositionPin());
-      disableForm();
+      callback();
     });
-  }
-  setResetFormButtonHandler();
-
-  // отправка данных на сервер
-
-  function sendDataServer() {
-    window.server.upload(window.message.addSuccessMessage, window.message.addErrorMessage, new FormData(form));
   }
 
   window.form = {
@@ -136,9 +127,8 @@
     disableForm: disableForm,
     fillAddress: fillAddress,
     setSubmitListener: setSubmitListener,
-    clearForm: clearForm,
-    sendDataServer: sendDataServer,
-    submitForm: submitForm
+    setResetListener: setResetListener,
+    getFormData: getFormData
   };
 })();
 

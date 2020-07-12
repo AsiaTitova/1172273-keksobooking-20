@@ -12,7 +12,7 @@
     OK: 200
   };
 
-  function load(url, method, onSuccess, onError, data) {
+  function createRequest(url, method, onSuccess, onError, data) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
@@ -38,11 +38,11 @@
   }
 
   function loadData(onSuccess, onError) {
-    load(URL_LOAD, METHOD_LOAD, onSuccess, onError);
+    createRequest(URL_LOAD, METHOD_LOAD, onSuccess, onError);
   }
 
-  function uploadData(onSuccess, onError, data) {
-    load(URL_UPLOAD, METHOD_UPLOAD, onSuccess, onError, data);
+  function uploadData(data, onSuccess, onError) {
+    createRequest(URL_UPLOAD, METHOD_UPLOAD, onSuccess, onError, data);
   }
 
   window.server = {

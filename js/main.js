@@ -8,6 +8,8 @@
     window.map.deactivateMap();
     window.form.disableForm();
     window.form.fillAddress(window.map.getPositionPin());
+    window.pin.removePins();
+    window.card.removeCard();
   }
 
   deactivatеPage();
@@ -45,16 +47,17 @@
   }
   // переход страницы в неактивное состояние после отправки формы
 
-  function setSubmitButtonHandler() {
-    window.form.sendDataServer();
-    window.form.clearForm();
-    window.pin.removePins();
-    window.card.removeCard();
-    window.map.returnMainPinCenterMap();
-    deactivatеPage();
-  }
+  window.form.setSubmitListener(function () {
+    function onSuccess() {
+      window.message.addSuccessMessage();
+      deactivatеPage();
+    }
+    var data = window.form.getFormData();
+    window.server.uploadData(data, onSuccess, window.message.addErrorMessage);
+  });
 
-  window.form.setSubmitListener(setSubmitButtonHandler);
+  // отчистка формы нажатием на кнопку отчистить
+  window.form.setResetListener(deactivatеPage);
 
 
 })();
