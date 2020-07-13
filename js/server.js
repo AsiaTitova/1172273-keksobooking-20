@@ -45,14 +45,9 @@
     createRequest(URL_UPLOAD, METHOD_UPLOAD, onSuccess, onError, data);
   }
 
-  function returnData() {
-    return URL_LOAD;
-  }
-
   window.server = {
     loadData: loadData,
-    uploadData: uploadData,
-    returnData: returnData
+    uploadData: uploadData
   };
 
 })();

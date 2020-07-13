@@ -5,7 +5,6 @@
   var MAX_NUMBER_DISPLAYED_PINS = 5;
   var ESC = 27;
 
-  var mapFilters = document.querySelector('.map__filters');
   var housingTypeSelect = document.querySelector('#housing-type');
 
   // создание нового массива
@@ -38,15 +37,13 @@
   function renderFiltersPins(adverts) {
     var fragment = document.createDocumentFragment();
     adverts.forEach(function (ad) {
-      if (ad.offer) {
-        var pinElement = window.pin.createPin(ad, function (evt) {
-          evt.preventDefault();
-          window.card.removeCard();
-          var card = window.card.createCard(ad, window.card.removeCard);
-          document.addEventListener('keydown', onEscPress);
-          window.map.addElement(card);
-        });
-      }
+      var pinElement = window.pin.createPin(ad, function (evt) {
+        evt.preventDefault();
+        window.card.removeCard();
+        var card = window.card.createCard(ad, window.card.removeCard);
+        document.addEventListener('keydown', onEscPress);
+        window.map.addElement(card);
+      });
       fragment.appendChild(pinElement);
     });
     window.map.addElement(fragment);
@@ -59,12 +56,22 @@
     }
   }
 
-  var adsToFilers = [];
 
-  function updatePins() {
-    renderFiltersPins(makeFitlerAds(adsToFilers, callFilters));
+  function successLoadFilterHandler(offers) {
+    window.filter.adsToFilers = offers;
+    renderFiltersPins(makeFitlerAds(offers, callFilters));
+    window.filter.updatePins();
   }
 
-  window.updatePins = updatePins;
+
+  function updatePins(offers) {
+    renderFiltersPins(makeFitlerAds(offers, callFilters));
+  }
+
+  window.filter = {
+    updatePins: updatePins,
+    adsToFilers: [],
+    successLoadFilterHandler: successLoadFilterHandler
+  };
 
 })();
