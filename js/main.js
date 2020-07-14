@@ -2,7 +2,7 @@
 
 (function () {
 
-  // var ESCAPE = 27;
+  var ESCAPE = 27;
 
   function deactivatеPage() {
     window.map.deactivateMap();
@@ -18,8 +18,18 @@
   function activatePage() {
     window.map.activateMap();
     window.form.activateForm();
-    window.server.loadData(window.filter.successLoadFilterHandler, window.message.addErrorMessage);
+    window.server.loadData(function (adverts) {
+      var filterData = window.filter.getFilteredData(adverts);
+      window.filter.setChangeListener(function () {
+        window.card.removeCard();
+        window.pin.removePins();
+        var filteredAds = window.filter.getFilteredData(adverts);
+        renderPins(filteredAds);
+      });
+      renderPins(filterData);
+    }, window.message.addErrorMessage);
   }
+
 
   // нажатием левой кнопки мыши и кнопки enter на основной пин
   window.map.setClickMainPinListener(activatePage);
