@@ -18,8 +18,18 @@
   function activatePage() {
     window.map.activateMap();
     window.form.activateForm();
-    window.server.loadData(renderPins, window.message.addErrorMessage);
+    window.server.loadData(function (adverts) {
+      var filterData = window.filter.getFilteredData(adverts);
+      window.filter.setChangeListener(function () {
+        window.card.removeCard();
+        window.pin.removePins();
+        var filteredAds = window.filter.getFilteredData(adverts);
+        renderPins(filteredAds);
+      });
+      renderPins(filterData);
+    }, window.message.addErrorMessage);
   }
+
 
   // нажатием левой кнопки мыши и кнопки enter на основной пин
   window.map.setClickMainPinListener(activatePage);
@@ -58,7 +68,6 @@
 
   // отчистка формы нажатием на кнопку отчистить
   window.form.setResetListener(deactivatеPage);
-
 
 })();
 
