@@ -24,7 +24,7 @@
         window.card.removeCard();
         window.pin.removePins();
         var filteredAds = window.filter.getFilteredData(adverts);
-        renderPins(filteredAds);
+        window.debounce(renderPins(filteredAds));
       });
       renderPins(filterData);
     }, window.message.addErrorMessage);
