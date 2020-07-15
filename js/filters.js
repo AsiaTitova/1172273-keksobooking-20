@@ -53,13 +53,13 @@
   // проверка на соответствие количеству комнат
 
   function checkOfferRooms(element) {
-    return housingRoomSelect.value === String(element.offer.rooms) || housingRoomSelect.value === DEFAULT_VALUE;
+    return housingRoomSelect.value === element.offer.rooms || housingRoomSelect.value === DEFAULT_VALUE;
   }
 
   // проверка на сообтвествия количества гостей
 
   function checkOfferGuests(element) {
-    return housingGuestSelect.value === String(element.offer.guests) || housingGuestSelect.value === DEFAULT_VALUE;
+    return housingGuestSelect.value === element.offer.guests || housingGuestSelect.value === DEFAULT_VALUE;
   }
 
   function checkFeatures(element) {
