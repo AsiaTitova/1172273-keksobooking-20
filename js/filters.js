@@ -12,7 +12,7 @@
 
   // создание нового массива
 
-  function makeFilterAds(offers) {
+  function getFilteredData(offers) {
     return offers.filter(function (offer) {
       return checkOfferType(offer) && checkOfferRooms(offer) && checkOfferGuests(offer) && checkOfferPrice(offer) && checkFeatures(checkOfferPrice);
     }).slice(0, MAX_NUMBER_DISPLAYED_PINS);
@@ -21,19 +21,21 @@
   // ценовые диапозоны для фильтрации
 
   var priceValues = {
-    low: {
-      min: 0,
-      max: 10000
+    LOW: {
+      MIN: 0,
+      MAX: 10000
     },
-    middle: {
-      min: 10000,
-      max: 50000
+    MIDDLE: {
+      MIN: 10000,
+      MAX: 50000
     },
-    high: {
-      min: 50000,
-      max: Infinity
+    HIGH: {
+      MIN: 50000,
+      MAX: Infinity
     }
   };
+
+  // проверка на соответсвие ценовому диапозону
 
   function checkOfferPrice(element) {
     if (housingPriceSelect.value !== DEFAULT_VALUE) {
@@ -41,8 +43,6 @@
     }
     return DEFAULT_VALUE;
   }
-
-  // проверка на соответсвие ценовому диапозону
 
   // проверка на соответсвие типу жилья
 
@@ -68,10 +68,6 @@
     return checkedFeatures.every(function (feature) {
       return element.offer.features.includes(feature.value, 0);
     });
-  }
-
-  function getFilteredData(offers) {
-    return makeFilterAds(offers);
   }
 
   function setChangeListener(onChange) {
