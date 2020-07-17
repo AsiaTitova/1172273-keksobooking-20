@@ -4,6 +4,8 @@
 
   var ESCAPE = 27;
 
+  var debouncedRenderPin = window.debounce(renderPins);
+
   function deactivatеPage() {
     window.map.deactivateMap();
     window.form.disableForm();
@@ -24,7 +26,7 @@
         window.card.removeCard();
         window.pin.removePins();
         var filteredAds = window.filter.getFilteredData(adverts);
-        renderPins(filteredAds);
+        debouncedRenderPin(filteredAds);
       });
       renderPins(filterData);
     }, window.message.addErrorMessage);
