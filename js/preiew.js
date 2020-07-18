@@ -10,8 +10,9 @@
   var avatarPreview = document.querySelector('.ad-form-header__img');
   var fileChooserPhoto = document.querySelector('#images');
   var photoPreview = document.querySelector('.ad-form__photo');
+  var photosContainer = document.querySelector('.ad-form__photo-container');
 
-  function loadImageElementHandler (fileChooser, preview, callback) {
+  function loadImageElementHandler (fileChooser, callback) {
     fileChooser.addEventListener('change', function () {
       var file = fileChooser.files[0];
       var fileName = file.name.toLowerCase();
@@ -23,9 +24,8 @@
         var reader = new FileReader();
         reader.addEventListener('load', function () {
           if (callback) {
-            preview = callback();
+            callback(reader.result);
           }
-          preview.src = reader.result;
         });
 
         reader.readAsDataURL(file);
@@ -33,22 +33,28 @@
     });
   }
 
-  function createImageElement() {
+  function createImageElement(src) {
     var photoItem = document.createElement('img');
     photoItem.width = PHOTO_HOUSE_WIDTH;
     photoItem.height = PHOTO_HOUSE_HEIGHT;
+    photoItem.src = src;
     photoPreview.appendChild(photoItem);
-    return photoItem;
+
+    var photoContainer = document.createElement('div');
+    photosContainer.appendChild(photoContainer);
+    photoContainer.classList.add('ad-form__photo');
+    photoContainer.appendChild(photoItem);
+    return photoContainer;
   }
 
   loadImageElementHandler(fileChooserAvatar, avatarPreview);
-  loadImageElementHandler(fileChooserPhoto, photoPreview, createImageElement);
+  loadImageElementHandler(fileChooserPhoto, createImageElement);
 
-  function removeImageElement() {
+  function clear() {
     avatarPreview.src = DEFAULT_URL_AVATAR;
     photoPreview.innerHTML = '';
   }
 
-  window.removeImageElement = removeImageElement;
+  window.clear = clear;
 
 })();
