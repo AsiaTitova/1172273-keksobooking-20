@@ -13,8 +13,10 @@
   // заблокировать активные поля формы и её отчистка
 
   function disableForm() {
+    form.classList.add('ad-form--disabled');
     window.utils.changeDisableStatus(formFieldset, true);
     clearForm();
+    window.clearPreview();
   }
 
   // переводим форму в активное состояние
