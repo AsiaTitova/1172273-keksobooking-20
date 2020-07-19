@@ -58,7 +58,7 @@
 
   function clearPreview() {
     avatarPreview.src = DEFAULT_URL_AVATAR;
-    photosContainer.querySelectorAll('.ad-form__photo').forEach(function(photoElement) {
+    photosContainer.querySelectorAll('.ad-form__photo').forEach(function (photoElement) {
       photoElement.remove();
     });
     photosContainer.appendChild(emptyPhotoContainer);
