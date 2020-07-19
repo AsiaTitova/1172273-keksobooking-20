@@ -12,7 +12,6 @@
     window.form.fillAddress(window.map.getPositionPin());
     window.pin.removePins();
     window.card.removeCard();
-    window.clear();
   }
 
   deactivatеPage();

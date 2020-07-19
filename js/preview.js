@@ -12,7 +12,7 @@
   var photoPreview = document.querySelector('.ad-form__photo');
   var photosContainer = document.querySelector('.ad-form__photo-container');
 
-  function loadImageElementHandler (fileChooser, callback) {
+  function loadImageElementHandler(fileChooser, callback) {
     fileChooser.addEventListener('change', function () {
       var file = fileChooser.files[0];
       var fileName = file.name.toLowerCase();
@@ -33,6 +33,12 @@
     });
   }
 
+  function createPreviewContainer() {
+    var photoContainer = document.createElement('div');
+    photosContainer.appendChild(photoContainer);
+    photoContainer.classList.add('ad-form__photo');
+  }
+
   function createImageElement(src) {
     var photoItem = document.createElement('img');
     photoItem.width = PHOTO_HOUSE_WIDTH;
@@ -40,21 +46,26 @@
     photoItem.src = src;
     photoPreview.appendChild(photoItem);
 
-    var photoContainer = document.createElement('div');
-    photosContainer.appendChild(photoContainer);
-    photoContainer.classList.add('ad-form__photo');
+    createPreviewContainer();
     photoContainer.appendChild(photoItem);
     return photoContainer;
   }
 
-  loadImageElementHandler(fileChooserAvatar, avatarPreview);
-  loadImageElementHandler(fileChooserPhoto, createImageElement);
-
-  function clear() {
-    avatarPreview.src = DEFAULT_URL_AVATAR;
-    photoPreview.innerHTML = '';
+  function changeAvatar(src) {
+    avatarPreview.src = src;
   }
 
-  window.clear = clear;
+  loadImageElementHandler(fileChooserAvatar, changeAvatar);
+  loadImageElementHandler(fileChooserPhoto, createImageElement);
+
+  function clearPreview() {
+    avatarPreview.src = DEFAULT_URL_AVATAR;
+    if (photoPreview) {
+      document.querySelector('.ad-form__photo').remove();
+    }
+    createPreviewContainer();
+  }
+
+  window.clearPreview = clearPreview;
 
 })();
