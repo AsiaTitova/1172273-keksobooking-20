@@ -87,8 +87,8 @@
   }
 
   window.card = {
-    createCard: createCard,
-    removeCard: removeCard
+    create: createCard,
+    remove: removeCard
   };
 
 })();

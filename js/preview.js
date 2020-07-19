@@ -48,14 +48,6 @@
     avatarPreview.src = src;
   }
 
-  loadImageElementHandler(fileChooserAvatar, changeAvatar);
-  loadImageElementHandler(fileChooserPhoto, function (src) {
-    if (photosContainer.contains(emptyPhotoContainer)) {
-      emptyPhotoContainer.remove();
-    }
-    createImageElement(src);
-  });
-
   function clearPreview() {
     avatarPreview.src = DEFAULT_URL_AVATAR;
     photosContainer.querySelectorAll('.ad-form__photo').forEach(function (photoElement) {
@@ -64,6 +56,14 @@
     photosContainer.appendChild(emptyPhotoContainer);
   }
 
-  window.clearPreview = clearPreview;
+  loadImageElementHandler(fileChooserAvatar, changeAvatar);
+  loadImageElementHandler(fileChooserPhoto, function (src) {
+    if (photosContainer.contains(emptyPhotoContainer)) {
+      emptyPhotoContainer.remove();
+    }
+    createImageElement(src);
+  });
+
+  window.clear = clearPreview;
 
 })();

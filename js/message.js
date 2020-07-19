@@ -1,22 +1,16 @@
 'use strict';
 
 (function () {
-  var ESC = 27;
 
   var main = document.querySelector('.page__main');
-
   var successMessagePopup = document.querySelector('#success').content.querySelector('.success');
   var errorMessagePopup = document.querySelector('#error').content.querySelector('.error');
-
-  // отриcовка сообщения об успешной отправке формы
 
   function addSuccessMessage() {
     main.appendChild(successMessagePopup);
     setRemovePopupButtonHandler(successMessagePopup, successMessagePopup);
     document.addEventListener('keydown', escPressHandler);
   }
-
-  // отрисовка соообщения об ошибке
 
   function addErrorMessage() {
     main.appendChild(errorMessagePopup);
@@ -37,7 +31,7 @@
   }
 
   function escPressHandler(evt) {
-    if (evt.keyCode === ESC) {
+    if (evt.keyCode === window.utils.esc) {
       evt.preventDefault();
       errorMessagePopup.remove();
       successMessagePopup.remove();
@@ -46,7 +40,7 @@
   }
 
   window.message = {
-    addSuccessMessage: addSuccessMessage,
-    addErrorMessage: addErrorMessage
+    addSuccess: addSuccessMessage,
+    addError: addErrorMessage
   };
 })();

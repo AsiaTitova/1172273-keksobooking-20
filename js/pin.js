@@ -1,6 +1,6 @@
 'use strict';
 (function () {
-  // На основе данных, созданных в первом пункте, создайте DOM-элементы, соответствующие меткам на карте, и заполните их данными из массива.
+
   var MARKER_WIDTH = 50;
   var MARKER_HEIGHT = 70;
 
@@ -26,8 +26,8 @@
   }
 
   window.pin = {
-    createPin: createPin,
-    removePins: removePins
+    create: createPin,
+    remove: removePins
   };
 
 })();

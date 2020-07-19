@@ -1,8 +1,7 @@
 'use strict';
 
 (function () {
-
-  // разблокировать-заблокировать элементы
+  var ESC = 27;
 
   function changeDisableStatus(elements, flag) {
     for (var i = 0; i < elements.length; i++) {
@@ -12,7 +11,8 @@
 
 
   window.utils = {
-    changeDisableStatus: changeDisableStatus
+    changeDisableStatus: changeDisableStatus,
+    esc: ESC
   };
 
 })();

@@ -2,47 +2,38 @@
 
 (function () {
 
-  var ESCAPE = 27;
-
-  var debouncedRenderPin = window.debounce(renderPins);
+  var debouncedRenderPins = window.debounce(renderPins);
 
   function deactivatеPage() {
-    window.map.deactivateMap();
-    window.form.disableForm();
+    window.map.deactivate();
+    window.form.disable();
     window.form.fillAddress(window.map.getPositionPin());
-    window.pin.removePins();
-    window.card.removeCard();
+    window.pin.remove();
+    window.card.remove();
   }
 
-  deactivatеPage();
-
-  // переводим страницу в активное состояние
   function activatePage() {
-    window.map.activateMap();
-    window.form.activateForm();
+    window.map.activate();
+    window.form.activate();
     window.server.loadData(function (adverts) {
       var filterData = window.filter.getFilteredData(adverts);
       window.filter.setChangeListener(function () {
-        window.card.removeCard();
-        window.pin.removePins();
+        window.card.remove();
+        window.pin.remove();
         var filteredAds = window.filter.getFilteredData(adverts);
-        debouncedRenderPin(filteredAds);
+        debouncedRenderPins(filteredAds);
       });
       renderPins(filterData);
-    }, window.message.addErrorMessage);
+    }, window.message.addError);
   }
-
-
-  // нажатием левой кнопки мыши и кнопки enter на основной пин
-  window.map.setClickMainPinListener(activatePage);
 
   function renderPins(adverts) {
     var fragment = document.createDocumentFragment();
     adverts.forEach(function (ad) {
-      var pinElement = window.pin.createPin(ad, function (evt) {
+      var pinElement = window.pin.create(ad, function (evt) {
         evt.preventDefault();
-        window.card.removeCard();
-        var card = window.card.createCard(ad, window.card.removeCard);
+        window.card.remove();
+        var card = window.card.create(ad, window.card.remove);
         document.addEventListener('keydown', onEscPress);
         window.map.addElement(card);
       });
@@ -52,23 +43,25 @@
   }
 
   function onEscPress(evt) {
-    if (evt.keyCode === ESCAPE) {
-      window.card.removeCard();
+    if (evt.keyCode === window.utils.esc) {
+      window.card.remove();
       document.removeEventListener('keydown', onEscPress);
     }
   }
-  // переход страницы в неактивное состояние после отправки формы
+
+  deactivatеPage();
+
+  window.map.setClickMainPinListener(activatePage);
 
   window.form.setSubmitListener(function () {
     function onSuccess() {
-      window.message.addSuccessMessage();
+      window.message.addSuccess();
       deactivatеPage();
     }
     var data = window.form.getFormData();
-    window.server.uploadData(data, onSuccess, window.message.addErrorMessage);
+    window.server.uploadData(data, onSuccess, window.message.addError);
   });
 
-  // отчистка формы нажатием на кнопку отчистить
   window.form.setResetListener(deactivatеPage);
 
 })();

@@ -10,19 +10,9 @@
   var map = document.querySelector('.map');
   var mainPin = map.querySelector('.map__pin--main');
 
-  // переводим страницу в неактивное состояние
-
-  function deactivateMap() {
-    map.classList.add('map--faded');
-    returnMainPinCenterMap();
+  function addElement(element) {
+    map.appendChild(element);
   }
-
-  // переводим карту в активное состояние
-  function activateMap() {
-    map.classList.remove('map--faded');
-  }
-
-  // добавление событий на главную метку
 
   function setClickMainPinListener(callback) {
     mainPin.addEventListener('click', function (evt) {
@@ -31,22 +21,19 @@
     });
   }
 
-  // добавление элементов на карту (пины, карточки объявлений)
-
-  function addElement(element) {
-    map.appendChild(element);
+  function deactivateMap() {
+    map.classList.add('map--faded');
+    returnMainPinCenterMap();
   }
 
-  // определяем координаты главной метки на карте
+  function activateMap() {
+    map.classList.remove('map--faded');
+  }
 
   function getPositionPin() {
-    // ищем нужный элемент;
     var pin = document.querySelector('.map__pin--main');
-    // верхний отступ эл-та от родителя;
     var positionY = pin.offsetTop;
-    // левый отступ эл-та от родителя;
     var positionX = pin.offsetLeft;
-
     if (map.classList.contains('map--faded')) {
       var coordinateX = Math.round(positionX + mainPin.offsetWidth / 2);
       var coordinateY = Math.round(positionY + mainPin.offsetHeight / 2);
@@ -58,12 +45,9 @@
     return coordinates;
   }
 
-  // перемещение основной метки по карте
-
   mainPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
-    // начальные координаты
     var startCoords = {
       x: evt.clientX,
       y: evt.clientY
@@ -71,7 +55,6 @@
 
     var dragged = false;
 
-    // функция передвижения пина
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
       dragged = true;
@@ -109,7 +92,6 @@
       window.form.fillAddress(getPositionPin());
     };
 
-    // функция установки пина при отпускании кнопки мыши
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
 
@@ -129,8 +111,6 @@
     document.addEventListener('mouseup', onMouseUp);
   });
 
-  // возвращение основного пина в центр карты
-
   function returnMainPinCenterMap() {
     mainPin.style.left = map.offsetWidth / 2 + 'px';
     mainPin.style.top = map.offsetHeight / 2 + 'px';
@@ -138,8 +118,8 @@
 
 
   window.map = {
-    activateMap: activateMap,
-    deactivateMap: deactivateMap,
+    activate: activateMap,
+    deactivate: deactivateMap,
     getPositionPin: getPositionPin,
     addElement: addElement,
     setClickMainPinListener: setClickMainPinListener
