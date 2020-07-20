@@ -87,7 +87,7 @@
     form.classList.add('ad-form--disabled');
     window.utils.changeDisableStatus(formFieldset, true);
     clearForm();
-    window.clear();
+    window.clearPreview();
   }
 
   function activateForm() {

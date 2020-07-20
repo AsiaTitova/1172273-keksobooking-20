@@ -64,6 +64,6 @@
     createImageElement(src);
   });
 
-  window.clear = clearPreview;
+  window.clearPreview = clearPreview;
 
 })();

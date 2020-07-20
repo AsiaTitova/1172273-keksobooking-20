@@ -2,7 +2,12 @@
 
 (function () {
 
-  var debouncedRenderPins = window.debounce(renderPins);
+  // var debouncedRenderPins = window.debounce(function () {
+  //   window.card.remove();
+  //   window.pin.remove();
+  //   var filteredAds = window.filter.getFilteredData(adverts);
+  //   renderPins(filteredAds);
+  // });
 
   function deactivatеPage() {
     window.map.deactivate();
@@ -17,12 +22,13 @@
     window.form.activate();
     window.server.loadData(function (adverts) {
       var filterData = window.filter.getFilteredData(adverts);
-      window.filter.setChangeListener(function () {
+      var debouncedRenderPins = window.debounce(function () {
         window.card.remove();
         window.pin.remove();
         var filteredAds = window.filter.getFilteredData(adverts);
-        debouncedRenderPins(filteredAds);
+        renderPins(filteredAds);
       });
+      window.filter.setChangeListener(debouncedRenderPins);
       renderPins(filterData);
     }, window.message.addError);
   }
@@ -34,7 +40,7 @@
         evt.preventDefault();
         window.card.remove();
         var card = window.card.create(ad, window.card.remove);
-        document.addEventListener('keydown', onEscPress);
+        document.addEventListener('keydown', escPressСardRemoveHandler);
         window.map.addElement(card);
       });
       fragment.appendChild(pinElement);
@@ -42,10 +48,10 @@
     window.map.addElement(fragment);
   }
 
-  function onEscPress(evt) {
+  function escPressСardRemoveHandler(evt) {
     if (evt.keyCode === window.utils.esc) {
       window.card.remove();
-      document.removeEventListener('keydown', onEscPress);
+      document.removeEventListener('keydown', escPressСardRemoveHandler);
     }
   }
 

@@ -9,7 +9,7 @@
   function addSuccessMessage() {
     main.appendChild(successMessagePopup);
     setRemovePopupButtonHandler(successMessagePopup, successMessagePopup);
-    document.addEventListener('keydown', escPressHandler);
+    document.addEventListener('keydown', escPressMessageRemoveHandler);
   }
 
   function addErrorMessage() {
@@ -17,7 +17,7 @@
 
     var errorButton = errorMessagePopup.querySelector('.error__button');
     setRemovePopupButtonHandler(errorButton, errorMessagePopup);
-    document.addEventListener('keydown', escPressHandler);
+    document.addEventListener('keydown', escPressMessageRemoveHandler);
   }
 
   function setRemovePopupButtonHandler(block, popup) {
@@ -25,17 +25,17 @@
       evt.preventDefault();
       if (popup) {
         popup.remove();
-        document.removeEventListener('keydown', escPressHandler);
+        document.removeEventListener('keydown', escPressMessageRemoveHandler);
       }
     });
   }
 
-  function escPressHandler(evt) {
+  function escPressMessageRemoveHandler(evt) {
     if (evt.keyCode === window.utils.esc) {
       evt.preventDefault();
       errorMessagePopup.remove();
       successMessagePopup.remove();
-      document.removeEventListener('keydown', escPressHandler);
+      document.removeEventListener('keydown', escPressMessageRemoveHandler);
     }
   }
 
