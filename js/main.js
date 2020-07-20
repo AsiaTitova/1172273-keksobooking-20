@@ -2,13 +2,6 @@
 
 (function () {
 
-  // var debouncedRenderPins = window.debounce(function () {
-  //   window.card.remove();
-  //   window.pin.remove();
-  //   var filteredAds = window.filter.getFilteredData(adverts);
-  //   renderPins(filteredAds);
-  // });
-
   function deactivatеPage() {
     window.map.deactivate();
     window.form.disable();
