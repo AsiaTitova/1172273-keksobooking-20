@@ -35,14 +35,14 @@
     }
   }
 
-  var setMinPrice = function () {
+  function setMinPrice() {
     priceInput.setAttribute('min', RoomsMinPrice[(typeSelect.value)]);
     priceInput.placeholder = RoomsMinPrice[(typeSelect.value)];
-  };
+  }
 
-  var typeChangeHandler = function () {
+  function typeChangeHandler() {
     setMinPrice();
-  };
+  }
 
   function getFormData() {
     return new FormData(form);
