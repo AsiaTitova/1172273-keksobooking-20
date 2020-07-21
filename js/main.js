@@ -2,7 +2,7 @@
 
 (function () {
 
-  function deactivatеPage() {
+  function deactivatePage() {
     window.map.deactivate();
     window.form.disable();
     window.form.fillAddress(window.map.getPositionPin());
@@ -48,20 +48,20 @@
     }
   }
 
-  deactivatеPage();
+  deactivatePage();
 
   window.map.setClickMainPinListener(activatePage);
 
   window.form.setSubmitListener(function () {
     function onSuccess() {
       window.message.addSuccess();
-      deactivatеPage();
+      deactivatePage();
     }
     var data = window.form.getFormData();
     window.server.uploadData(data, onSuccess, window.message.addError);
   });
 
-  window.form.setResetListener(deactivatеPage);
+  window.form.setResetListener(deactivatePage);
 
 })();
 

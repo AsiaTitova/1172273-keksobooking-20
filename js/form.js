@@ -1,65 +1,48 @@
 'use strict';
 
 (function () {
-  var MIN_PRICE_BUNGALO = 0;
-  var MIN_PRICE_FLAT = 1000;
-  var MIN_PRICE_HOUSE = 5000;
-  var MIN_PRICE_PALACE = 10000;
+
+  var RoomsMinPrice = {
+    bungalo: 0,
+    flat: 1000,
+    house: 5000,
+    palace: 10000
+  };
 
   var form = document.querySelector('.ad-form');
   var formFieldset = form.querySelectorAll('.ad-form__element');
   var resetForm = document.querySelector('.ad-form__reset');
   var priceInput = form.querySelector('#price');
-  var typeInput = form.querySelector('#type');
+  var typeSelect = form.querySelector('select[name="type"]');
   var checkInInput = form.querySelector('#timein');
   var checkOutInput = form.querySelector('#timeout');
-  var roomsInput = form.querySelector('#room_number');
-  var guestsInput = form.querySelector('#capacity');
+  var roomsSelect = form.querySelector('select[name="rooms"]');
+  var guestsSelect = form.querySelector('select[name="capacity"]');
 
-  checkInInput.addEventListener('input', function () {
-    checkOutInput.value = checkInInput.value;
-  });
-
-  checkOutInput.addEventListener('input', function () {
-    checkInInput.value = checkOutInput.value;
-  });
-
-  guestsInput.addEventListener('change', function () {
+  function guestsSelectInputHandler() {
     switch (true) {
-      case roomsInput.value !== '100' && guestsInput.value === '0':
-        return guestsInput.setCustomValidity('Выберете колличество гостей');
+      case roomsSelect.value !== '100' && guestsSelect.value === '0':
+        return guestsSelect.setCustomValidity('Выберете колличество гостей');
 
-      case roomsInput.value < guestsInput.value:
-        return guestsInput.setCustomValidity('Количество гостей не может привышать количество комнат');
+      case roomsSelect.value < guestsSelect.value && guestsSelect.value.value !== '0':
+        return guestsSelect.setCustomValidity('Количество гостей не может привышать количество комнат');
 
-      case roomsInput.value === '100' && guestsInput.value !== '0':
-        return guestsInput.setCustomValidity('Данный тип жилья не для гостей');
+      case roomsSelect.value === '100' && guestsSelect.value !== '0':
+        return guestsSelect.setCustomValidity('Данный тип жилья не для гостей');
 
       default:
-        return guestsInput.setCustomValidity('');
+        return guestsSelect.setCustomValidity('');
     }
-  });
-
-  priceInput.addEventListener('change', function () {
-    switch (true) {
-      case typeInput.value === 'bungalo':
-        return setMinPrice(priceInput, MIN_PRICE_BUNGALO);
-
-      case typeInput.value === 'flat':
-        return setMinPrice(priceInput, MIN_PRICE_FLAT);
-
-      case typeInput.value === 'house':
-        return setMinPrice(priceInput, MIN_PRICE_HOUSE);
-
-      default:
-        return setMinPrice(priceInput, MIN_PRICE_PALACE);
-    }
-  });
-
-  function setMinPrice(input, minPrice) {
-    input.setAttribute('min', minPrice);
-    input.placeholder = minPrice;
   }
+
+  var setMinPrice = function () {
+    priceInput.setAttribute('min', RoomsMinPrice[(typeSelect.value)]);
+    priceInput.placeholder = RoomsMinPrice[(typeSelect.value)];
+  };
+
+  var typeChangeHandler = function () {
+    setMinPrice();
+  };
 
   function getFormData() {
     return new FormData(form);
@@ -99,6 +82,18 @@
     var address = form.querySelector('#address');
     address.value = coordinates;
   }
+
+  checkInInput.addEventListener('input', function () {
+    checkOutInput.value = checkInInput.value;
+  });
+
+  checkOutInput.addEventListener('input', function () {
+    checkInInput.value = checkOutInput.value;
+  });
+
+  guestsSelect.addEventListener('change', guestsSelectInputHandler);
+  roomsSelect.addEventListener('change', guestsSelectInputHandler);
+  typeSelect.addEventListener('change', typeChangeHandler);
 
   window.form = {
     activate: activateForm,
